@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Components - Cryptic UI</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+</head>
+<body>
+
+<div class="layout">
+    <!-- Side Rail -->
+    <aside class="rail">
+        <div class="rail-logo">SH</div>
+        <nav class="rail-nav">
+            <a href="index.html" class="rail-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </a>
+            <a href="#" class="rail-link active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                </svg>
+            </a>
+        </nav>
+        <div class="rail-cryptic">部品集</div>
+    </aside>
+
+    <main class="main">
+        <!-- Header -->
+        <header class="comp-header">
+            <div>
+                <span class="tech-label">COMPONENTS.UI</span>
+                <h1 class="comp-title">Component Library</h1>
+                <p class="comp-desc">All UI components in our cryptic warm style</p>
+            </div>
+        </header>
+
+        <div class="comp-grid">
+
+            <!-- ============================================
+                 BUTTONS
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">01</span>
+                    <h2>Button</h2>
+                    <span class="cryptic-label">ボタン</span>
+                </div>
+                <div class="comp-demo">
+                    <button class="btn btn-primary">Primary</button>
+                    <button class="btn btn-secondary">Secondary</button>
+                    <button class="btn btn-ghost">Ghost</button>
+                    <button class="btn btn-outline">Outline</button>
+                    <button class="btn btn-destructive">Destructive</button>
+                    <button class="btn btn-primary" disabled>Disabled</button>
+                </div>
+                <div class="comp-demo">
+                    <button class="btn btn-primary btn-sm">Small</button>
+                    <button class="btn btn-primary">Default</button>
+                    <button class="btn btn-primary btn-lg">Large</button>
+                    <button class="btn btn-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 INPUT
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">02</span>
+                    <h2>Input</h2>
+                    <span class="cryptic-label">入力</span>
+                </div>
+                <div class="comp-demo comp-demo-col">
+                    <div class="input-group">
+                        <label class="label">Email</label>
+                        <input type="email" class="input" placeholder="you@example.com">
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Password</label>
+                        <input type="password" class="input" placeholder="••••••••">
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Disabled</label>
+                        <input type="text" class="input" placeholder="Disabled input" disabled>
+                    </div>
+                    <div class="input-group">
+                        <label class="label">With icon</label>
+                        <div class="input-icon-wrap">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                            <input type="text" class="input input-with-icon" placeholder="Search...">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 TEXTAREA
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">03</span>
+                    <h2>Textarea</h2>
+                    <span class="cryptic-label">テキスト</span>
+                </div>
+                <div class="comp-demo comp-demo-col">
+                    <div class="input-group">
+                        <label class="label">Message</label>
+                        <textarea class="textarea" placeholder="Type your message..." rows="4"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 SELECT / DROPDOWN
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">04</span>
+                    <h2>Select</h2>
+                    <span class="cryptic-label">選択</span>
+                </div>
+                <div class="comp-demo comp-demo-col">
+                    <div class="input-group">
+                        <label class="label">Framework</label>
+                        <div class="select-wrap">
+                            <select class="select">
+                                <option value="">Select a framework</option>
+                                <option value="react">React</option>
+                                <option value="vue">Vue</option>
+                                <option value="svelte">Svelte</option>
+                                <option value="angular">Angular</option>
+                            </select>
+                            <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 CHECKBOX
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">05</span>
+                    <h2>Checkbox</h2>
+                    <span class="cryptic-label">確認</span>
+                </div>
+                <div class="comp-demo comp-demo-col">
+                    <label class="checkbox-wrap">
+                        <input type="checkbox" class="checkbox">
+                        <span class="checkbox-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        </span>
+                        <span class="checkbox-label">Accept terms and conditions</span>
+                    </label>
+                    <label class="checkbox-wrap">
+                        <input type="checkbox" class="checkbox" checked>
+                        <span class="checkbox-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        </span>
+                        <span class="checkbox-label">Send me notifications</span>
+                    </label>
+                    <label class="checkbox-wrap checkbox-disabled">
+                        <input type="checkbox" class="checkbox" disabled>
+                        <span class="checkbox-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        </span>
+                        <span class="checkbox-label">Disabled option</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 RADIO
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">06</span>
+                    <h2>Radio Group</h2>
+                    <span class="cryptic-label">単一選択</span>
+                </div>
+                <div class="comp-demo comp-demo-col">
+                    <div class="radio-group">
+                        <label class="radio-wrap">
+                            <input type="radio" name="plan" class="radio" checked>
+                            <span class="radio-dot"></span>
+                            <span class="radio-label">Free plan</span>
+                        </label>
+                        <label class="radio-wrap">
+                            <input type="radio" name="plan" class="radio">
+                            <span class="radio-dot"></span>
+                            <span class="radio-label">Pro plan</span>
+                        </label>
+                        <label class="radio-wrap">
+                            <input type="radio" name="plan" class="radio">
+                            <span class="radio-dot"></span>
+                            <span class="radio-label">Enterprise</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 SWITCH
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">07</span>
+                    <h2>Switch</h2>
+                    <span class="cryptic-label">切替</span>
+                </div>
+                <div class="comp-demo comp-demo-col">
+                    <label class="switch-wrap">
+                        <input type="checkbox" class="switch-input">
+                        <span class="switch"></span>
+                        <span class="switch-label">Airplane mode</span>
+                    </label>
+                    <label class="switch-wrap">
+                        <input type="checkbox" class="switch-input" checked>
+                        <span class="switch"></span>
+                        <span class="switch-label">Dark mode</span>
+                    </label>
+                    <label class="switch-wrap switch-disabled">
+                        <input type="checkbox" class="switch-input" disabled>
+                        <span class="switch"></span>
+                        <span class="switch-label">Disabled</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 SLIDER
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">08</span>
+                    <h2>Slider</h2>
+                    <span class="cryptic-label">範囲</span>
+                </div>
+                <div class="comp-demo comp-demo-col">
+                    <div class="input-group">
+                        <label class="label">Volume</label>
+                        <input type="range" class="slider" min="0" max="100" value="50">
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Brightness</label>
+                        <input type="range" class="slider" min="0" max="100" value="75">
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 BADGE
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">09</span>
+                    <h2>Badge</h2>
+                    <span class="cryptic-label">標識</span>
+                </div>
+                <div class="comp-demo">
+                    <span class="badge">Default</span>
+                    <span class="badge badge-peach">Peach</span>
+                    <span class="badge badge-moss">Moss</span>
+                    <span class="badge badge-sand">Sand</span>
+                    <span class="badge badge-blush">Blush</span>
+                    <span class="badge badge-outline">Outline</span>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 AVATAR
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">10</span>
+                    <h2>Avatar</h2>
+                    <span class="cryptic-label">顔写真</span>
+                </div>
+                <div class="comp-demo">
+                    <div class="avatar avatar-sm">
+                        <span>JD</span>
+                    </div>
+                    <div class="avatar">
+                        <span>AB</span>
+                    </div>
+                    <div class="avatar avatar-lg">
+                        <span>MK</span>
+                    </div>
+                    <div class="avatar-group">
+                        <div class="avatar"><span>A</span></div>
+                        <div class="avatar"><span>B</span></div>
+                        <div class="avatar"><span>C</span></div>
+                        <div class="avatar avatar-more"><span>+3</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 ALERT
+                 ============================================ -->
+            <section class="comp-section comp-section-wide">
+                <div class="comp-section-head">
+                    <span class="comp-num">11</span>
+                    <h2>Alert</h2>
+                    <span class="cryptic-label">通知</span>
+                </div>
+                <div class="comp-demo comp-demo-col">
+                    <div class="alert">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                        <div class="alert-content">
+                            <div class="alert-title">Information</div>
+                            <div class="alert-desc">This is a default informational alert.</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-success">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <div class="alert-content">
+                            <div class="alert-title">Success</div>
+                            <div class="alert-desc">Your changes have been saved successfully.</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-warning">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4M12 17h.01"/></svg>
+                        <div class="alert-content">
+                            <div class="alert-title">Warning</div>
+                            <div class="alert-desc">Please review before continuing.</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-error">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                        <div class="alert-content">
+                            <div class="alert-title">Error</div>
+                            <div class="alert-desc">Something went wrong. Please try again.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 PROGRESS
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">12</span>
+                    <h2>Progress</h2>
+                    <span class="cryptic-label">進捗</span>
+                </div>
+                <div class="comp-demo comp-demo-col">
+                    <div class="progress-wrap">
+                        <div class="progress-bar" style="--progress: 25%"></div>
+                    </div>
+                    <div class="progress-wrap">
+                        <div class="progress-bar progress-peach" style="--progress: 50%"></div>
+                    </div>
+                    <div class="progress-wrap">
+                        <div class="progress-bar progress-moss" style="--progress: 75%"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 TABS
+                 ============================================ -->
+            <section class="comp-section comp-section-wide">
+                <div class="comp-section-head">
+                    <span class="comp-num">13</span>
+                    <h2>Tabs</h2>
+                    <span class="cryptic-label">タブ</span>
+                </div>
+                <div class="comp-demo comp-demo-col">
+                    <div class="tabs">
+                        <div class="tabs-list">
+                            <button class="tab active">Account</button>
+                            <button class="tab">Password</button>
+                            <button class="tab">Settings</button>
+                        </div>
+                        <div class="tabs-content">
+                            <p>Make changes to your account here. Click save when you're done.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 CARD
+                 ============================================ -->
+            <section class="comp-section comp-section-wide">
+                <div class="comp-section-head">
+                    <span class="comp-num">14</span>
+                    <h2>Card</h2>
+                    <span class="cryptic-label">カード</span>
+                </div>
+                <div class="comp-demo">
+                    <div class="ui-card">
+                        <div class="ui-card-header">
+                            <h3 class="ui-card-title">Create project</h3>
+                            <p class="ui-card-desc">Deploy your new project in one-click.</p>
+                        </div>
+                        <div class="ui-card-content">
+                            <div class="input-group">
+                                <label class="label">Name</label>
+                                <input type="text" class="input" placeholder="Project name">
+                            </div>
+                        </div>
+                        <div class="ui-card-footer">
+                            <button class="btn btn-ghost">Cancel</button>
+                            <button class="btn btn-primary">Deploy</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 TABLE
+                 ============================================ -->
+            <section class="comp-section comp-section-wide">
+                <div class="comp-section-head">
+                    <span class="comp-num">15</span>
+                    <h2>Table</h2>
+                    <span class="cryptic-label">表</span>
+                </div>
+                <div class="comp-demo">
+                    <div class="table-wrap">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Invoice</th>
+                                    <th>Status</th>
+                                    <th>Method</th>
+                                    <th class="text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-mono">INV001</td>
+                                    <td><span class="badge badge-moss">Paid</span></td>
+                                    <td>Credit Card</td>
+                                    <td class="text-right">$250.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-mono">INV002</td>
+                                    <td><span class="badge badge-sand">Pending</span></td>
+                                    <td>PayPal</td>
+                                    <td class="text-right">$150.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-mono">INV003</td>
+                                    <td><span class="badge badge-blush">Cancelled</span></td>
+                                    <td>Bank Transfer</td>
+                                    <td class="text-right">$350.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 BREADCRUMB
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">16</span>
+                    <h2>Breadcrumb</h2>
+                    <span class="cryptic-label">階層</span>
+                </div>
+                <div class="comp-demo">
+                    <nav class="breadcrumb">
+                        <a href="#" class="breadcrumb-item">Home</a>
+                        <span class="breadcrumb-sep">/</span>
+                        <a href="#" class="breadcrumb-item">Components</a>
+                        <span class="breadcrumb-sep">/</span>
+                        <span class="breadcrumb-item current">Breadcrumb</span>
+                    </nav>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 PAGINATION
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">17</span>
+                    <h2>Pagination</h2>
+                    <span class="cryptic-label">頁送り</span>
+                </div>
+                <div class="comp-demo">
+                    <nav class="pagination">
+                        <button class="page-btn page-prev" disabled>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                        </button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <span class="page-dots">...</span>
+                        <button class="page-btn">10</button>
+                        <button class="page-btn page-next">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+                        </button>
+                    </nav>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 TOOLTIP
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">18</span>
+                    <h2>Tooltip</h2>
+                    <span class="cryptic-label">説明</span>
+                </div>
+                <div class="comp-demo">
+                    <div class="tooltip-wrap">
+                        <button class="btn btn-secondary">Hover me</button>
+                        <div class="tooltip">This is a tooltip</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 DROPDOWN MENU
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">19</span>
+                    <h2>Dropdown</h2>
+                    <span class="cryptic-label">展開</span>
+                </div>
+                <div class="comp-demo">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-trigger">
+                            Options
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                Profile
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                Settings
+                            </a>
+                            <div class="dropdown-sep"></div>
+                            <a href="#" class="dropdown-item dropdown-item-danger">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 CALENDAR
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">20</span>
+                    <h2>Calendar</h2>
+                    <span class="cryptic-label">暦</span>
+                </div>
+                <div class="comp-demo">
+                    <div class="calendar">
+                        <div class="calendar-header">
+                            <button class="calendar-nav">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                            </button>
+                            <span class="calendar-title">January 2026</span>
+                            <button class="calendar-nav">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+                            </button>
+                        </div>
+                        <div class="calendar-grid">
+                            <div class="calendar-day-name">Su</div>
+                            <div class="calendar-day-name">Mo</div>
+                            <div class="calendar-day-name">Tu</div>
+                            <div class="calendar-day-name">We</div>
+                            <div class="calendar-day-name">Th</div>
+                            <div class="calendar-day-name">Fr</div>
+                            <div class="calendar-day-name">Sa</div>
+
+                            <button class="calendar-day other">28</button>
+                            <button class="calendar-day other">29</button>
+                            <button class="calendar-day other">30</button>
+                            <button class="calendar-day other">31</button>
+                            <button class="calendar-day">1</button>
+                            <button class="calendar-day">2</button>
+                            <button class="calendar-day">3</button>
+
+                            <button class="calendar-day">4</button>
+                            <button class="calendar-day">5</button>
+                            <button class="calendar-day">6</button>
+                            <button class="calendar-day">7</button>
+                            <button class="calendar-day">8</button>
+                            <button class="calendar-day">9</button>
+                            <button class="calendar-day">10</button>
+
+                            <button class="calendar-day">11</button>
+                            <button class="calendar-day">12</button>
+                            <button class="calendar-day">13</button>
+                            <button class="calendar-day">14</button>
+                            <button class="calendar-day">15</button>
+                            <button class="calendar-day">16</button>
+                            <button class="calendar-day">17</button>
+
+                            <button class="calendar-day">18</button>
+                            <button class="calendar-day">19</button>
+                            <button class="calendar-day">20</button>
+                            <button class="calendar-day">21</button>
+                            <button class="calendar-day">22</button>
+                            <button class="calendar-day">23</button>
+                            <button class="calendar-day">24</button>
+
+                            <button class="calendar-day today">25</button>
+                            <button class="calendar-day">26</button>
+                            <button class="calendar-day">27</button>
+                            <button class="calendar-day">28</button>
+                            <button class="calendar-day">29</button>
+                            <button class="calendar-day">30</button>
+                            <button class="calendar-day">31</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 DIALOG / MODAL
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">21</span>
+                    <h2>Dialog</h2>
+                    <span class="cryptic-label">対話</span>
+                </div>
+                <div class="comp-demo">
+                    <button class="btn btn-secondary" onclick="document.getElementById('demo-dialog').showModal()">Open Dialog</button>
+
+                    <dialog id="demo-dialog" class="dialog">
+                        <div class="dialog-content">
+                            <h3 class="dialog-title">Are you sure?</h3>
+                            <p class="dialog-desc">This action cannot be undone. This will permanently delete your account.</p>
+                            <div class="dialog-footer">
+                                <button class="btn btn-ghost" onclick="document.getElementById('demo-dialog').close()">Cancel</button>
+                                <button class="btn btn-destructive" onclick="document.getElementById('demo-dialog').close()">Delete</button>
+                            </div>
+                        </div>
+                    </dialog>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 SKELETON
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">22</span>
+                    <h2>Skeleton</h2>
+                    <span class="cryptic-label">骨格</span>
+                </div>
+                <div class="comp-demo comp-demo-col">
+                    <div class="skeleton-demo">
+                        <div class="skeleton skeleton-circle"></div>
+                        <div class="skeleton-lines">
+                            <div class="skeleton skeleton-text"></div>
+                            <div class="skeleton skeleton-text short"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 SEPARATOR
+                 ============================================ -->
+            <section class="comp-section comp-section-wide">
+                <div class="comp-section-head">
+                    <span class="comp-num">23</span>
+                    <h2>Separator</h2>
+                    <span class="cryptic-label">区切</span>
+                </div>
+                <div class="comp-demo comp-demo-col">
+                    <div class="separator"></div>
+                    <div class="separator-with-text">
+                        <span>or continue with</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 KBD
+                 ============================================ -->
+            <section class="comp-section">
+                <div class="comp-section-head">
+                    <span class="comp-num">24</span>
+                    <h2>Kbd</h2>
+                    <span class="cryptic-label">鍵盤</span>
+                </div>
+                <div class="comp-demo">
+                    <kbd class="kbd">⌘</kbd>
+                    <kbd class="kbd">K</kbd>
+                    <span style="margin: 0 0.5rem; color: var(--muted);">or</span>
+                    <kbd class="kbd">Ctrl</kbd>
+                    <kbd class="kbd">K</kbd>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="comp-footer">
+            <span class="cryptic-label">系統終端</span>
+            <span>Component Library v5</span>
+        </footer>
+
+    </main>
+</div>
+
+</body>
+</html>

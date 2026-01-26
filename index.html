@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillHub v5 - Hero Shapes</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="layout">
+    <!-- Side Rail -->
+    <aside class="rail">
+        <div class="rail-logo">SH</div>
+        <nav class="rail-nav">
+            <a href="#" class="rail-link active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </a>
+            <a href="#" class="rail-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                </svg>
+            </a>
+            <a href="#" class="rail-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                    <polyline points="17 6 23 6 23 12"/>
+                </svg>
+            </a>
+            <a href="#" class="rail-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                </svg>
+            </a>
+        </nav>
+        <div class="rail-cryptic">技術登録</div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <!-- HERO -->
+        <section class="hero">
+
+            <div class="hero-top">
+                <span class="tech-label">SYS.REGISTRY.v4</span>
+                <nav class="nav-mini">
+                    <a href="#">Browse</a>
+                    <a href="#">Docs</a>
+                    <a href="#">API</a>
+                </nav>
+            </div>
+
+            <div class="hero-center">
+                <h1 class="hero-title">
+                    Build<br><span class="accent">smarter</span>
+                </h1>
+
+                <div class="hero-sub">
+                    <p class="hero-desc">
+                        The skill registry for AI agents. Publish once, use everywhere. Semantic search finds exactly what you need.
+                    </p>
+                    <div class="hero-data">
+                        <div class="hero-stat">
+                            <span class="num">2,547</span>
+                            <span class="label">Skills</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="num">12.3k</span>
+                            <span class="label">Weekly</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-bottom">
+                <div class="hero-actions">
+                    <button class="btn btn-primary">Explore skills</button>
+                    <button class="btn btn-ghost">Documentation</button>
+                </div>
+                <div class="hero-hint">Scroll</div>
+            </div>
+        </section>
+
+        <!-- FEATURED SECTION -->
+        <section class="section">
+            <div class="section-marker">
+                <span class="section-num">01</span>
+                <span class="cryptic-label">特集スキル</span>
+            </div>
+
+            <div class="section-head">
+                <div class="section-eyebrow">Featured</div>
+                <h2 class="section-title">The tools everyone's using</h2>
+            </div>
+
+            <div class="card-chaos">
+                <article class="card featured" data-id="機能.001">
+                    <div class="card-top">
+                        <div class="card-icon peach">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                            </svg>
+                        </div>
+                        <span class="card-badge badge-peach">Featured</span>
+                    </div>
+                    <h3 class="card-name">code-review</h3>
+                    <p class="card-desc">Comprehensive code review with security analysis, best practices, and actionable suggestions.</p>
+                    <div class="card-foot">
+                        <span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            1.2k
+                        </span>
+                        <span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            8.4k
+                        </span>
+                    </div>
+                </article>
+
+                <article class="card" data-id="機能.002">
+                    <div class="card-top">
+                        <div class="card-icon moss">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                            </svg>
+                        </div>
+                        <span class="card-badge badge-moss">Popular</span>
+                    </div>
+                    <h3 class="card-name">api-builder</h3>
+                    <p class="card-desc">Generate REST APIs from natural language.</p>
+                </article>
+
+                <article class="card" data-id="機能.003">
+                    <div class="card-top">
+                        <div class="card-icon sand">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="card-name">db-migrate</h3>
+                    <p class="card-desc">Smart migrations with rollback support.</p>
+                </article>
+
+                <article class="card" data-id="機能.004">
+                    <div class="card-top">
+                        <div class="card-icon blush">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="card-name">test-gen</h3>
+                    <p class="card-desc">Auto-generate test suites.</p>
+                </article>
+
+                <article class="card" data-id="機能.005">
+                    <div class="card-top">
+                        <div class="card-icon lilac">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="card-name">doc-writer</h3>
+                    <p class="card-desc">Generate documentation automatically.</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- STATS & CATEGORIES -->
+        <section class="section">
+            <div class="section-marker">
+                <span class="section-num">02</span>
+                <span class="cryptic-label">統計概要</span>
+            </div>
+
+            <div class="section-head">
+                <div class="section-eyebrow">Overview</div>
+                <h2 class="section-title">Growing every day</h2>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat">
+                    <span class="stat-num">2.5k</span>
+                    <span class="stat-label">Skills</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-num">847</span>
+                    <span class="stat-label">Contributors</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-num">12k</span>
+                    <span class="stat-label">Weekly installs</span>
+                </div>
+            </div>
+
+            <div class="categories">
+                <div class="cat">
+                    <div class="icon peach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+                    <span class="name">Development</span>
+                    <span class="count">342</span>
+                </div>
+                <div class="cat">
+                    <div class="icon moss"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                    <span class="name">Security</span>
+                    <span class="count">128</span>
+                </div>
+                <div class="cat">
+                    <div class="icon sand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg></div>
+                    <span class="name">Testing</span>
+                    <span class="count">215</span>
+                </div>
+                <div class="cat">
+                    <div class="icon blush"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg></div>
+                    <span class="name">Data</span>
+                    <span class="count">189</span>
+                </div>
+                <div class="cat">
+                    <div class="icon lilac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+                    <span class="name">Docs</span>
+                    <span class="count">156</span>
+                </div>
+                <div class="cat">
+                    <div class="icon clay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+                    <span class="name">DevOps</span>
+                    <span class="count">203</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- TERMINAL -->
+        <section class="section">
+            <div class="section-marker">
+                <span class="section-num">03</span>
+                <span class="cryptic-label">端末操作</span>
+            </div>
+
+            <div class="section-head">
+                <div class="section-eyebrow">CLI</div>
+                <h2 class="section-title">Install in seconds</h2>
+            </div>
+
+            <div class="terminal-area">
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">skillhub search "code review"</span></div>
+                        <div class="t-out">Found 12 matching skills</div>
+                        <br>
+                        <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">skillhub install code-review</span></div>
+                        <div class="t-out t-ok">+ Installed code-review@2.1.0</div>
+                    </div>
+                </div>
+                <div class="terminal-side">
+                    <div class="big">2s</div>
+                    <div class="small">avg. install time</div>
+                    <div class="cryptic-label">処理時間</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TRENDING -->
+        <section class="section">
+            <div class="section-marker">
+                <span class="section-num">04</span>
+                <span class="cryptic-label">人気順位</span>
+            </div>
+
+            <div class="list-head">
+                <h2 class="list-title">Trending this week</h2>
+                <a href="#" class="list-link">View all →</a>
+            </div>
+
+            <div class="list-items">
+                <div class="list-item">
+                    <span class="list-rank">01</span>
+                    <div class="list-info">
+                        <div class="icon peach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+                        <span class="list-name">code-review</span>
+                    </div>
+                    <span class="list-meta">+342</span>
+                </div>
+                <div class="list-item">
+                    <span class="list-rank">02</span>
+                    <div class="list-info">
+                        <div class="icon sand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+                        <span class="list-name">api-builder</span>
+                    </div>
+                    <span class="list-meta">+287</span>
+                </div>
+                <div class="list-item">
+                    <span class="list-rank">03</span>
+                    <div class="list-info">
+                        <div class="icon moss"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg></div>
+                        <span class="list-name">db-migrate</span>
+                    </div>
+                    <span class="list-meta">+198</span>
+                </div>
+                <div class="list-item">
+                    <span class="list-rank">04</span>
+                    <div class="list-info">
+                        <div class="icon blush"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg></div>
+                        <span class="list-name">test-gen</span>
+                    </div>
+                    <span class="list-meta">+156</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-brand">Skillhub Registry</div>
+            <nav class="footer-links">
+                <a href="#">Docs</a>
+                <a href="#">API</a>
+                <a href="#">GitHub</a>
+                <a href="#">Twitter</a>
+            </nav>
+            <div class="footer-right">
+                <span class="cryptic-label">系統終端 2026</span>
+            </div>
+        </footer>
+
+    </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+# Redirects
+# Uncomment below to make portfolio the homepage
+# /           /portfolio.html     200
+/home       /portfolio.html     301
+/about      /portfolio.html#about     301
+/projects   /portfolio.html#projects  301
+/contact    /portfolio.html#contact   301
+/blog       /portfolio.html#blog      301
+
+# Pretty URLs for blog posts
+/blog/ai-powered-apps-2026  /blog-post.html  200
+
+# 404 handling
+/*          /404.html           404
