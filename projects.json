@@ -1,0 +1,50 @@
+[
+  {
+    "id": "ghost-pipeline",
+    "title": "USD Pipeline Tools",
+    "description": "Comprehensive USD workflow tools for Solaris and Maya. Asset browser with PySide6 frontend, cross-DCC communication, and automated publishing pipelines.",
+    "image": "images/projects/usd-pipeline.jpg",
+    "tags": ["Python", "USD", "PySide6", "Houdini"],
+    "featured": true,
+    "links": {
+      "demo": null,
+      "code": null
+    }
+  },
+  {
+    "id": "hda-library",
+    "title": "Houdini HDA Library",
+    "description": "Collection of production-ready HDAs for lighting and FX workflows. Includes automated light rig setups and render layer management.",
+    "image": "images/projects/hda-library.jpg",
+    "tags": ["Houdini", "VEX", "Python"],
+    "featured": false,
+    "links": {
+      "demo": null,
+      "code": null
+    }
+  },
+  {
+    "id": "shotgrid-tools",
+    "title": "ShotGrid Integration Suite",
+    "description": "Custom ShotGrid toolkit for asset tracking, version control, and artist task management. Seamless DCC integration.",
+    "image": "images/projects/shotgrid-tools.jpg",
+    "tags": ["Python", "ShotGrid", "Qt"],
+    "featured": false,
+    "links": {
+      "demo": null,
+      "code": null
+    }
+  },
+  {
+    "id": "cfx-tools",
+    "title": "CFX Simulation Tools",
+    "description": "Character FX toolset for cloth, hair, and muscle simulation. Built with PyMel and OpenMaya for production pipelines.",
+    "image": "images/projects/cfx-tools.jpg",
+    "tags": ["Maya", "PyMel", "Ziva"],
+    "featured": false,
+    "links": {
+      "demo": null,
+      "code": null
+    }
+  }
+]
