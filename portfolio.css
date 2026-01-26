@@ -652,8 +652,10 @@
 }
 
 /* ============================================
-   FORM ENHANCEMENTS
+   INTERACTIVE ENHANCEMENTS
    ============================================ */
+
+/* Form Validation */
 .input-group {
     position: relative;
 }
@@ -661,13 +663,13 @@
 .input-error {
     display: block;
     font-size: 0.75rem;
-    color: var(--terracotta);
+    color: var(--clay);
     margin-top: 0.35rem;
     min-height: 1rem;
 }
 
 .input-invalid {
-    border-color: var(--terracotta) !important;
+    border-color: var(--clay) !important;
 }
 
 .input-invalid:focus {
@@ -691,6 +693,7 @@
     flex-shrink: 0;
 }
 
+/* Button Loading State */
 .btn-loading {
     display: inline-flex;
     align-items: center;
@@ -711,9 +714,39 @@
     to { transform: rotate(360deg); }
 }
 
-/* ============================================
-   FADE-IN ANIMATIONS
-   ============================================ */
+/* Toast Notifications */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    padding: 0.75rem 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--white);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.toast.success {
+    border-color: var(--moss);
+}
+
+.toast.error {
+    border-color: var(--clay);
+}
+
+/* Scroll Animations */
 .fade-in-element {
     opacity: 0;
     transform: translateY(30px);
@@ -725,28 +758,62 @@
     transform: translateY(0);
 }
 
-/* Stagger animation delays for grid items */
+/* Stagger delays */
 .p-project-card.fade-in-element:nth-child(1) { transition-delay: 0s; }
 .p-project-card.fade-in-element:nth-child(2) { transition-delay: 0.1s; }
-.p-project-card.fade-in-element:nth-child(3) { transition-delay: 0.2s; }
-.p-project-card.fade-in-element:nth-child(4) { transition-delay: 0.3s; }
+.p-project-card.fade-in-element:nth-child(3) { transition-delay: 0.15s; }
+.p-project-card.fade-in-element:nth-child(4) { transition-delay: 0.2s; }
 
 .p-blog-card.fade-in-element:nth-child(1) { transition-delay: 0s; }
 .p-blog-card.fade-in-element:nth-child(2) { transition-delay: 0.1s; }
-.p-blog-card.fade-in-element:nth-child(3) { transition-delay: 0.2s; }
+.p-blog-card.fade-in-element:nth-child(3) { transition-delay: 0.15s; }
 
 .p-timeline-item.fade-in-element:nth-child(1) { transition-delay: 0s; }
-.p-timeline-item.fade-in-element:nth-child(2) { transition-delay: 0.15s; }
-.p-timeline-item.fade-in-element:nth-child(3) { transition-delay: 0.3s; }
+.p-timeline-item.fade-in-element:nth-child(2) { transition-delay: 0.1s; }
+.p-timeline-item.fade-in-element:nth-child(3) { transition-delay: 0.2s; }
 
-/* ============================================
-   PRINT STYLES
-   ============================================ */
+/* Dropdown Open State */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 180px;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.15s ease;
+    z-index: 100;
+}
+
+.dropdown.open .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Calendar Selected State */
+.calendar-day.selected {
+    background: var(--peach);
+    color: var(--void);
+}
+
+/* Print Styles */
 @media print {
     .rail,
     .p-hero-actions,
     .p-contact-form,
-    .p-footer-right {
+    .p-footer-right,
+    .toast {
         display: none !important;
     }
 
@@ -760,15 +827,8 @@
         break-inside: avoid;
     }
 
-    .p-hero-title,
-    .p-section-title,
-    .p-job-title,
-    .p-project-title {
-        color: #000 !important;
-    }
-
-    .badge {
-        border: 1px solid #ccc;
-        background: transparent;
+    .fade-in-element {
+        opacity: 1;
+        transform: none;
     }
 }

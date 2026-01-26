@@ -5,31 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alejandro Cabrera - Full-Stack Developer & Designer</title>
 
-    <!-- SEO Meta Tags -->
+    <!-- SEO -->
     <meta name="description" content="Full-Stack Developer & Designer based in San Francisco. Building beautiful, functional digital experiences with AI-powered applications and modern web technologies.">
     <meta name="author" content="Alejandro Cabrera">
-    <meta name="keywords" content="web developer, full stack developer, designer, react, typescript, AI, san francisco">
 
-    <!-- Open Graph / Social -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Alejandro Cabrera - Full-Stack Developer & Designer">
     <meta property="og:description" content="Building beautiful, functional digital experiences with AI-powered applications and modern web technologies.">
     <meta property="og:url" content="https://yourdomain.pages.dev">
-    <meta property="og:image" content="https://yourdomain.pages.dev/og-image.png">
 
-    <!-- Twitter Card -->
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Alejandro Cabrera - Full-Stack Developer">
-    <meta name="twitter:description" content="Building beautiful, functional digital experiences.">
 
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>AC</text></svg>">
-
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://yourdomain.pages.dev">
-
-    <!-- Theme Color -->
+    <!-- Theme -->
     <meta name="theme-color" content="#0f0d0b">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>AC</text></svg>">
 
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="components.css">
@@ -518,9 +510,8 @@
                         <textarea id="message" name="message" class="textarea" placeholder="Tell me about your project..." rows="5" required minlength="10"></textarea>
                         <span class="input-error" id="message-error"></span>
                     </div>
-                    <!-- Honeypot field for spam prevention -->
                     <input type="text" name="_gotcha" style="display:none">
-                    <button type="submit" class="btn btn-primary btn-lg" id="submit-btn">
+                    <button type="submit" class="btn btn-primary btn-lg">
                         <span class="btn-text">Send message</span>
                         <span class="btn-loading" style="display:none">Sending...</span>
                         <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
@@ -555,197 +546,9 @@
     </main>
 </div>
 
-<script>
-(function() {
-    'use strict';
+<!-- Toast Container -->
+<div class="toast" id="toast"></div>
 
-    // ============================================
-    // SMOOTH SCROLL FOR ANCHOR LINKS
-    // ============================================
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                const offset = 80;
-                const targetPosition = target.getBoundingClientRect().top + window.scrollY - offset;
-                window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-            }
-        });
-    });
-
-    // ============================================
-    // UPDATE ACTIVE RAIL LINK ON SCROLL
-    // ============================================
-    const sections = document.querySelectorAll('section[id]');
-    const railLinks = document.querySelectorAll('.rail-link');
-
-    function updateActiveLink() {
-        let current = '';
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            if (scrollY >= sectionTop - 200) {
-                current = section.getAttribute('id');
-            }
-        });
-
-        railLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-            }
-        });
-    }
-
-    // ============================================
-    // INTERSECTION OBSERVER FOR ANIMATIONS
-    // ============================================
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px 0px -100px 0px',
-        threshold: 0.1
-    };
-
-    const fadeInObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in-visible');
-                fadeInObserver.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    // Observe elements for fade-in
-    document.querySelectorAll('.p-section, .p-project-card, .p-blog-card, .p-timeline-item').forEach(el => {
-        el.classList.add('fade-in-element');
-        fadeInObserver.observe(el);
-    });
-
-    // ============================================
-    // CONTACT FORM HANDLING
-    // ============================================
-    const form = document.getElementById('contact-form');
-    const submitBtn = document.getElementById('submit-btn');
-    const formSuccess = document.getElementById('form-success');
-
-    if (form) {
-        // Real-time validation
-        const inputs = form.querySelectorAll('input, textarea');
-        inputs.forEach(input => {
-            input.addEventListener('blur', () => validateField(input));
-            input.addEventListener('input', () => {
-                if (input.classList.contains('input-invalid')) {
-                    validateField(input);
-                }
-            });
-        });
-
-        function validateField(field) {
-            const errorEl = document.getElementById(`${field.id}-error`);
-            let isValid = true;
-            let errorMsg = '';
-
-            if (field.required && !field.value.trim()) {
-                isValid = false;
-                errorMsg = 'This field is required';
-            } else if (field.type === 'email' && field.value) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(field.value)) {
-                    isValid = false;
-                    errorMsg = 'Please enter a valid email';
-                }
-            } else if (field.minLength && field.value.length < field.minLength) {
-                isValid = false;
-                errorMsg = `Minimum ${field.minLength} characters required`;
-            }
-
-            if (errorEl) {
-                errorEl.textContent = errorMsg;
-            }
-            field.classList.toggle('input-invalid', !isValid);
-            return isValid;
-        }
-
-        // Form submission
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            // Validate all fields
-            let isFormValid = true;
-            inputs.forEach(input => {
-                if (!validateField(input)) {
-                    isFormValid = false;
-                }
-            });
-
-            if (!isFormValid) return;
-
-            // Show loading state
-            submitBtn.disabled = true;
-            submitBtn.querySelector('.btn-text').style.display = 'none';
-            submitBtn.querySelector('.btn-loading').style.display = 'inline';
-            submitBtn.querySelector('.btn-icon').style.display = 'none';
-
-            try {
-                const formData = new FormData(form);
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: { 'Accept': 'application/json' }
-                });
-
-                if (response.ok) {
-                    // Success
-                    form.reset();
-                    formSuccess.style.display = 'flex';
-                    setTimeout(() => {
-                        formSuccess.style.display = 'none';
-                    }, 5000);
-                } else {
-                    throw new Error('Form submission failed');
-                }
-            } catch (error) {
-                alert('There was an error sending your message. Please try again or email me directly.');
-            } finally {
-                // Reset button state
-                submitBtn.disabled = false;
-                submitBtn.querySelector('.btn-text').style.display = 'inline';
-                submitBtn.querySelector('.btn-loading').style.display = 'none';
-                submitBtn.querySelector('.btn-icon').style.display = 'inline';
-            }
-        });
-    }
-
-    // ============================================
-    // PERFORMANCE OPTIMIZED SCROLL HANDLER
-    // ============================================
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                updateActiveLink();
-                ticking = false;
-            });
-            ticking = true;
-        }
-    }, { passive: true });
-
-    // ============================================
-    // KEYBOARD NAVIGATION
-    // ============================================
-    document.addEventListener('keydown', (e) => {
-        // Press 'h' to go home
-        if (e.key === 'h' && !e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
-            document.querySelector('#home')?.scrollIntoView({ behavior: 'smooth' });
-        }
-    });
-
-    // ============================================
-    // INITIALIZE
-    // ============================================
-    updateActiveLink();
-})();
-</script>
-
+<script src="app.js"></script>
 </body>
 </html>
