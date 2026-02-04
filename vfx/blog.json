@@ -6,7 +6,7 @@
     "date": "2026-02-04",
     "category": "Pipeline",
     "categoryColor": "peach",
-    "url": "../blog/automating-shot-pipeline.html"
+    "url": "../blog/automating-shot-pipeline.html?from=vfx"
   },
   {
     "id": "mvc-pyside-dcc-tools",
@@ -15,7 +15,7 @@
     "date": "2026-02-03",
     "category": "Pipeline",
     "categoryColor": "peach",
-    "url": "../blog/mvc-pyside-dcc-tools.html"
+    "url": "../blog/mvc-pyside-dcc-tools.html?from=vfx"
   },
   {
     "id": "usd-production-pitfalls",
@@ -24,7 +24,7 @@
     "date": "2026-01-14",
     "category": "Pipeline",
     "categoryColor": "peach",
-    "url": "../blog/usd-production-pitfalls.html"
+    "url": "../blog/usd-production-pitfalls.html?from=vfx"
   },
   {
     "id": "cross-dcc-communication",
@@ -33,7 +33,7 @@
     "date": "2025-12-30",
     "category": "Pipeline",
     "categoryColor": "peach",
-    "url": "../blog/cross-dcc-communication.html"
+    "url": "../blog/cross-dcc-communication.html?from=vfx"
   },
   {
     "id": "rust-for-pipeline-clis",
@@ -42,7 +42,7 @@
     "date": "2026-01-07",
     "category": "Rust",
     "categoryColor": "sand",
-    "url": "../blog/rust-for-pipeline-clis.html"
+    "url": "../blog/rust-for-pipeline-clis.html?from=vfx"
   },
   {
     "id": "github-actions-patterns",
@@ -51,7 +51,7 @@
     "date": "2026-01-28",
     "category": "Infrastructure",
     "categoryColor": "moss",
-    "url": "../blog/github-actions-patterns.html"
+    "url": "../blog/github-actions-patterns.html?from=vfx"
   },
   {
     "id": "terraform-side-projects",
@@ -60,6 +60,6 @@
     "date": "2026-01-21",
     "category": "Infrastructure",
     "categoryColor": "moss",
-    "url": "../blog/terraform-side-projects.html"
+    "url": "../blog/terraform-side-projects.html?from=vfx"
   }
 ]

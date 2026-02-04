@@ -790,6 +790,39 @@
     }
 
     // ============================================
+    // BLOG NAV CONTEXT
+    // ============================================
+    function initBlogNavContext() {
+        // Only run on blog post pages (inside /blog/)
+        if (!window.location.pathname.includes('/blog/')) return;
+
+        // Determine which portfolio the user came from
+        const params = new URLSearchParams(window.location.search);
+        let section = params.get('from');
+
+        if (!section && document.referrer) {
+            const ref = document.referrer;
+            if (ref.includes('/dev/') || ref.includes('/dev')) section = 'dev';
+            else if (ref.includes('/vfx/') || ref.includes('/vfx')) section = 'vfx';
+        }
+
+        if (!section) section = 'dev'; // default
+
+        const base = '../' + section + '/';
+        // Update rail logo, home link, breadcrumb
+        document.querySelectorAll('.rail-logo, .rail-link[title="Home"]').forEach(el => {
+            el.setAttribute('href', base);
+        });
+        document.querySelectorAll('.rail-link[title="Blog"]').forEach(el => {
+            el.setAttribute('href', base + '#blog');
+        });
+        // Breadcrumb links
+        const crumbs = document.querySelectorAll('.article-breadcrumb a');
+        if (crumbs.length >= 1) crumbs[0].setAttribute('href', base);
+        if (crumbs.length >= 2) crumbs[1].setAttribute('href', base + '#blog');
+    }
+
+    // ============================================
     // INITIALIZE ALL
     // ============================================
     function init() {
@@ -811,6 +844,7 @@
         initTocScrollSpy();
         initReadingTime();
         initKeyboardShortcuts();
+        initBlogNavContext();
 
         console.log('Cryptic UI initialized');
     }
