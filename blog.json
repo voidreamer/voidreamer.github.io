@@ -10,7 +10,7 @@
   },
   {
     "id": "mvc-pyside-dcc-tools",
-    "title": "MVC in DCC Tools: Why Your Data Model Matters",
+    "title": "MVC in DCC Tools: Data Models Matter More Than UI",
     "excerpt": "How separating data models from UI in PySide2 made our asset browser maintainable, testable, and portable across Maya, Houdini, and Nuke.",
     "date": "2026-02-03",
     "category": "Pipeline",
@@ -28,7 +28,7 @@
   },
   {
     "id": "terraform-side-projects",
-    "title": "Terraform for Side Projects: Cheaper Than You Think",
+    "title": "Terraform for Side Projects: Cheaper Than I Expected",
     "excerpt": "Running three full-stack apps on AWS for under $5/month with Terraform. API Gateway, Lambda, DynamoDB, CloudFront, and why IaC is worth it even for small projects.",
     "date": "2026-01-21",
     "category": "Infrastructure",
