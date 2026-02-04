@@ -1,0 +1,29 @@
+[
+  {
+    "id": "usd-workflows-2026",
+    "title": "Modern USD Workflows in VFX Production",
+    "excerpt": "A deep dive into implementing USD pipelines across Maya, Houdini, and Solaris for seamless asset interchange...",
+    "date": "2026-01-20",
+    "category": "Pipeline",
+    "categoryColor": "peach",
+    "url": "blog/usd-workflows.html"
+  },
+  {
+    "id": "pyside-dcc-tools",
+    "title": "Building Cross-DCC Tools with PySide6",
+    "excerpt": "How to create consistent Qt-based interfaces that work across Maya, Houdini, and Nuke with shared codebases...",
+    "date": "2026-01-12",
+    "category": "Tools",
+    "categoryColor": "moss",
+    "url": "blog/pyside-tools.html"
+  },
+  {
+    "id": "hda-best-practices",
+    "title": "HDA Development Best Practices",
+    "excerpt": "Lessons learned from building production HDAs: versioning, parameters, and artist-friendly interfaces...",
+    "date": "2025-12-28",
+    "category": "Houdini",
+    "categoryColor": "sand",
+    "url": "blog/hda-practices.html"
+  }
+]

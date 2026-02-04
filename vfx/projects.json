@@ -1,0 +1,37 @@
+[
+  {
+    "title": "Anvil",
+    "description": "A Rust-based package manager for VFX/Animation pipelines. Think Rez, but faster. YAML-based package definitions, automatic dependency resolution, and DCC launcher for Maya, Houdini, Blender, Nuke with correct environment setup.",
+    "tags": ["Rust", "CLI", "VFX Pipeline", "Package Manager"],
+    "link": "https://github.com/voidreamer/anvil",
+    "image": ""
+  },
+  {
+    "title": "OpenGrid",
+    "description": "Modern production tracking for VFX/Animation — a lightweight alternative to ShotGrid. Python SDK for working with production data, FastAPI REST API, and React dashboard. Track assets, shots, tasks, and versions.",
+    "tags": ["Python", "FastAPI", "React", "Production Tracking"],
+    "link": "https://github.com/voidreamer/opengrid-lite",
+    "image": ""
+  },
+  {
+    "title": "USD Asset Resolver",
+    "description": "Production-ready USD AR2 resolver with Rust-powered performance. Smart URI parsing, LRU caching with mtime invalidation, SQLite backend, automatic version resolution, and PySide6 visual asset browser.",
+    "tags": ["Rust", "USD", "Python", "PyO3", "PySide6"],
+    "link": "https://github.com/voidreamer/usd-asset-resolver",
+    "image": ""
+  },
+  {
+    "title": "USD Lint",
+    "description": "A Rust-based CLI linter for .usda files. Validates naming conventions, hierarchy depth, composition arcs, and property metadata against configurable studio rules. Single static binary, no runtime dependencies.",
+    "tags": ["Rust", "USD", "CLI", "Linter"],
+    "link": "https://github.com/voidreamer/usd-lint",
+    "image": ""
+  },
+  {
+    "title": "Rosewood UI",
+    "description": "A warm, cozy design system with CSS components, React wrappers, and PySide6/Qt components for DCC tool GUIs. Dark-first design that works across web apps and desktop pipeline tools.",
+    "tags": ["PySide6", "React", "CSS", "Design System"],
+    "link": "https://github.com/voidreamer/rosewood-ui",
+    "image": ""
+  }
+]
