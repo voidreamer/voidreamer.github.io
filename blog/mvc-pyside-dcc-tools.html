@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVC in DCC Tools: Why Your Data Model Matters | Alejandro Cabrera</title>
+
+    <meta name="description" content="How separating data models from UI in PySide2 made our asset browser maintainable, testable, and portable across Maya, Houdini, and Nuke.">
+    <meta name="author" content="Alejandro Cabrera">
+    <meta name="keywords" content="PySide2, PySide6, MVC, Qt, VFX, pipeline, asset browser, data model">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="MVC in DCC Tools: Why Your Data Model Matters">
+    <meta property="og:description" content="How separating data models from UI in PySide2 made our asset browser maintainable, testable, and portable across DCCs.">
+    <meta property="article:published_time" content="2026-02-03">
+    <meta property="article:author" content="Alejandro Cabrera">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MVC in DCC Tools: Why Your Data Model Matters">
+
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../components.css">
+    <link rel="stylesheet" href="../portfolio.css">
+    <link rel="stylesheet" href="../blog.css">
+</head>
+<body>
+
+<div class="reading-progress" id="reading-progress"></div>
+
+<div class="layout">
+    <aside class="rail">
+        <a href="../index.html" class="rail-logo">AC</a>
+        <nav class="rail-nav">
+            <a href="../index.html" class="rail-link" title="Home">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </a>
+            <a href="../index.html#blog" class="rail-link active" title="Blog">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+                    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+                    <path d="M2 2l7.586 7.586"/>
+                    <circle cx="11" cy="11" r="2"/>
+                </svg>
+            </a>
+        </nav>
+        <div class="rail-cryptic">記事</div>
+    </aside>
+
+    <main class="main">
+        <article class="blog-article">
+            <header class="article-header">
+                <nav class="article-breadcrumb">
+                    <a href="../index.html">Home</a>
+                    <span>/</span>
+                    <a href="../index.html#blog">Blog</a>
+                    <span>/</span>
+                    <span>MVC in DCC Tools</span>
+                </nav>
+
+                <div class="article-meta-top">
+                    <span class="badge badge-peach">Pipeline</span>
+                    <span class="article-reading-time" id="reading-time">7 min read</span>
+                </div>
+
+                <h1 class="article-title">MVC in DCC Tools: Why Your Data Model Matters</h1>
+
+                <p class="article-subtitle">
+                    How separating data models from UI in PySide2 made our asset browser maintainable,
+                    testable, and portable across Maya, Houdini, and Nuke.
+                </p>
+
+                <div class="article-author">
+                    <div class="avatar avatar-sm">
+                        <span class="avatar-fallback">AC</span>
+                    </div>
+                    <div class="article-author-info">
+                        <span class="article-author-name">Alejandro Cabrera</span>
+                        <time class="article-date" datetime="2026-02-03">February 3, 2026</time>
+                    </div>
+                </div>
+            </header>
+
+            <nav class="article-toc" id="toc">
+                <h4 class="toc-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <line x1="8" y1="6" x2="21" y2="6"/>
+                        <line x1="8" y1="12" x2="21" y2="12"/>
+                        <line x1="8" y1="18" x2="21" y2="18"/>
+                        <line x1="3" y1="6" x2="3.01" y2="6"/>
+                        <line x1="3" y1="12" x2="3.01" y2="12"/>
+                        <line x1="3" y1="18" x2="3.01" y2="18"/>
+                    </svg>
+                    Contents
+                </h4>
+                <ul class="toc-list">
+                    <li><a href="#intro" class="toc-link">How Every Pipeline Tool Starts</a></li>
+                    <li><a href="#anti-pattern" class="toc-link">Everything in the Button Callback</a></li>
+                    <li><a href="#model-first" class="toc-link">Writing a Real Data Model</a></li>
+                    <li><a href="#connecting" class="toc-link">Signals, Slots, and Staying Sane</a></li>
+                    <li><a href="#swapping-views" class="toc-link">Swapping Views Without Rewriting Logic</a></li>
+                    <li><a href="#testing" class="toc-link">Testing Without Opening Maya</a></li>
+                    <li><a href="#pyside6-migration" class="toc-link">Why Migrating to PySide6 Was Painless</a></li>
+                </ul>
+            </nav>
+
+            <div class="article-content" id="article-content">
+                <section id="intro">
+                    <p class="lead">
+                        At Ghost VFX I built an asset browser in PySide2 that about 40 artists used every day. It started as a quick tool to browse published assets and load them into Maya. By the end of the show it ran in Houdini and Nuke too, had filtering, thumbnails, versioning, and a template system. The reason it survived that growth without turning into a mess was one boring decision I made early on: I separated the data model from the UI.
+                    </p>
+
+                    <p>
+                        That sounds obvious if you have done any web or desktop development. But in VFX pipeline tools, it is surprisingly rare. Most tools start as scripts, grow into windows, and end up as unmaintainable blobs where ShotGrid queries live inside button callbacks. I have written tools like that. I have also inherited them. Neither experience is fun.
+                    </p>
+                </section>
+
+                <section id="anti-pattern">
+                    <h2>Everything in the Button Callback</h2>
+
+                    <p>
+                        Here is what pipeline tools often look like in practice. Someone needs a tool to load assets, so they write something like this:
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <button class="code-copy" data-copy="code-1" title="Copy code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="code-1">class AssetBrowser(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.list_widget = QListWidget()
+        self.load_btn = QPushButton("Load Selected")
+        self.load_btn.clicked.connect(self.on_load)
+
+        # Fetch assets right here in the constructor
+        sg = shotgun_api3.Shotgun(...)
+        assets = sg.find("Asset", [["project", "is", project]],
+                         ["code", "sg_asset_type", "sg_status_list"])
+        for asset in assets:
+            self.list_widget.addItem(asset["code"])
+
+    def on_load(self):
+        selected = self.list_widget.currentItem().text()
+        # Query ShotGrid again for the path
+        sg = shotgun_api3.Shotgun(...)
+        publishes = sg.find("PublishedFile",
+                            [["entity.Asset.code", "is", selected]],
+                            ["path"])
+        path = publishes[-1]["path"]["local_path"]
+        cmds.file(path, reference=True)</code></pre>
+                    </div>
+
+                    <p>
+                        This works. And that is the problem, because it works well enough that people ship it. Then someone asks for filtering by asset type, so you add a combo box and another ShotGrid query in its callback. Then someone wants thumbnails, so you add image loading mixed in with the UI layout code. Six months later you have 800 lines in one file, ShotGrid connections scattered everywhere, and no way to reuse any of it outside Maya.
+                    </p>
+
+                    <p>
+                        I inherited a tool like this at a previous studio. Adding a single feature meant understanding the entire file because the data flow was invisible. There was no separation between "what data do we have" and "how do we show it."
+                    </p>
+                </section>
+
+                <section id="model-first">
+                    <h2>Writing a Real Data Model</h2>
+
+                    <p>
+                        For the Ghost asset browser, I started with the model. Not a QAbstractItemModel yet, just a plain Python class that knew how to fetch and filter assets. No Qt imports, no UI code, no DCC imports. Just data.
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <button class="code-copy" data-copy="code-2" title="Copy code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="code-2">from dataclasses import dataclass, field
+from typing import Optional
+
+@dataclass
+class AssetItem:
+    name: str
+    asset_type: str
+    status: str
+    latest_version: int
+    publish_path: str
+    thumbnail_path: Optional[str] = None
+
+class AssetModel:
+    def __init__(self, project_id, sg_connection):
+        self._sg = sg_connection
+        self._project_id = project_id
+        self._assets: list[AssetItem] = []
+        self._filter_type: Optional[str] = None
+
+    def fetch(self):
+        """Pull assets from ShotGrid. No UI logic here."""
+        raw = self._sg.find("Asset",
+            [["project", "is", {"type": "Project", "id": self._project_id}]],
+            ["code", "sg_asset_type", "sg_status_list", "image"])
+        self._assets = [
+            AssetItem(
+                name=r["code"],
+                asset_type=r.get("sg_asset_type", ""),
+                status=r.get("sg_status_list", ""),
+                latest_version=self._get_latest_version(r["id"]),
+                publish_path=self._get_publish_path(r["id"]),
+                thumbnail_path=r.get("image"),
+            )
+            for r in raw
+        ]
+
+    def set_filter(self, asset_type: Optional[str]):
+        self._filter_type = asset_type
+
+    @property
+    def filtered_assets(self) -> list[AssetItem]:
+        if not self._filter_type:
+            return self._assets
+        return [a for a in self._assets
+                if a.asset_type == self._filter_type]</code></pre>
+                    </div>
+
+                    <p>
+                        This class does not know about QListWidget or QTreeView. It does not know about Maya or Houdini. It is just a data container with some query logic. You can instantiate it in a test, call <code>fetch()</code> with a mock ShotGrid connection, and verify the filtering works. Try doing that with the button-callback version.
+                    </p>
+                </section>
+
+                <section id="connecting">
+                    <h2>Signals, Slots, and Staying Sane</h2>
+
+                    <p>
+                        Once you have a clean data model, you wrap it in a QAbstractItemModel (or use QStandardItemModel if you want something quicker) and let Qt's model/view framework do the wiring. I used custom roles to expose asset metadata beyond just the display name:
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <button class="code-copy" data-copy="code-3" title="Copy code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="code-3">from PySide2.QtCore import Qt, QAbstractListModel, QModelIndex
+
+class AssetListModel(QAbstractListModel):
+    AssetTypeRole = Qt.UserRole + 1
+    StatusRole = Qt.UserRole + 2
+    PathRole = Qt.UserRole + 3
+    VersionRole = Qt.UserRole + 4
+
+    def __init__(self, asset_model, parent=None):
+        super().__init__(parent)
+        self._model = asset_model
+
+    def rowCount(self, parent=QModelIndex()):
+        return len(self._model.filtered_assets)
+
+    def data(self, index, role=Qt.DisplayRole):
+        asset = self._model.filtered_assets[index.row()]
+        if role == Qt.DisplayRole:
+            return asset.name
+        if role == self.AssetTypeRole:
+            return asset.asset_type
+        if role == self.StatusRole:
+            return asset.status
+        if role == self.PathRole:
+            return asset.publish_path
+        if role == self.VersionRole:
+            return asset.latest_version
+        return None
+
+    def refresh(self):
+        self.beginResetModel()
+        self._model.fetch()
+        self.endResetModel()</code></pre>
+                    </div>
+
+                    <p>
+                        The view side is then straightforward. A QTreeView or QListView points at this model, and a QSortFilterProxyModel handles the type filtering in between. When the artist picks a different asset type from the dropdown, you update the proxy filter and the view refreshes automatically. No manual clearing and repopulating of list widgets.
+                    </p>
+
+                    <p>
+                        The part that surprised me was how much cleaner the signal/slot connections became. Instead of a button callback that does five things, you have small, focused connections. The filter combo box emits <code>currentTextChanged</code>, which calls <code>proxy.setFilterFixedString()</code>. The selection model emits <code>selectionChanged</code>, which updates a details panel. Each connection does one thing, and you can trace the data flow by reading the signal names.
+                    </p>
+                </section>
+
+                <section id="swapping-views">
+                    <h2>Swapping Views Without Rewriting Logic</h2>
+
+                    <p>
+                        Halfway through the show, the art director asked if we could add a thumbnail grid view alongside the list. Because the data model was separate, this took about a day. I wrote a custom delegate that drew thumbnails in a QListView with <code>setViewMode(QListView.IconMode)</code>, pointed it at the same proxy model, and added a toggle button. Both views stayed in sync because they shared the same underlying model. If I had put all the logic in the list widget, this would have meant duplicating everything.
+                    </p>
+
+                    <p>
+                        Later, when we wanted a "recently used" section at the top of the browser, I added another small model that tracked access history in a local JSON file. It fed into its own QListView above the main one. Again, no changes to the asset model or the ShotGrid query code.
+                    </p>
+                </section>
+
+                <section id="testing">
+                    <h2>Testing Without Opening Maya</h2>
+
+                    <p>
+                        This is the part that made the biggest practical difference. Because <code>AssetModel</code> has no DCC imports and no Qt imports, I could write unit tests that ran with plain pytest. I mocked the ShotGrid connection, populated the model with known data, and tested filtering, sorting, and edge cases like empty results or missing thumbnails.
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <button class="code-copy" data-copy="code-4" title="Copy code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="code-4">def test_filter_by_type(mock_sg):
+    model = AssetModel(project_id=123, sg_connection=mock_sg)
+    model.fetch()
+
+    model.set_filter("Character")
+    chars = model.filtered_assets
+    assert all(a.asset_type == "Character" for a in chars)
+
+    model.set_filter(None)
+    assert len(model.filtered_assets) == len(model._assets)</code></pre>
+                    </div>
+
+                    <p>
+                        These tests ran in under a second. Compare that to opening Maya, loading the tool, clicking around, and visually checking if the list looks right. We caught a bug once where assets with a <code>None</code> status field caused a crash in the filter. A test found it before any artist did.
+                    </p>
+                </section>
+
+                <section id="pyside6-migration">
+                    <h2>Why Migrating to PySide6 Was Painless</h2>
+
+                    <p>
+                        Toward the end of my time at Ghost, we started an R&D spike to migrate tools from PySide2 to PySide6. For most tools in the studio, this was a painful search-and-replace job because UI code and logic were tangled together, and you had to carefully test everything after each change.
+                    </p>
+
+                    <p>
+                        For the asset browser, the migration touched almost nothing. The data model had zero PySide imports, so it did not change at all. The Qt model wrapper needed a few import path updates (<code>PySide2.QtCore</code> to <code>PySide6.QtCore</code>) and one API change where <code>QSortFilterProxyModel.setFilterRegExp</code> became <code>setFilterRegularExpression</code>. The views needed the same import swaps. That was it. No logic changes, no retesting of ShotGrid queries, no debugging data flow issues.
+                    </p>
+
+                    <p>
+                        If I had to give one piece of advice to someone building pipeline tools: write your data layer first, keep it free of UI and DCC imports, and connect it to your views through Qt's model/view framework or simple signals and slots. It is not exciting. Nobody is going to see it and think it is clever. But when you need to add a feature six months later, or swap out your tracking backend, or migrate to a new Qt version, you will be glad you did it. The hour you spend separating concerns at the start saves you days of untangling later. I have seen it go both ways, and the difference is not subtle.
+                    </p>
+                </section>
+            </div>
+
+            <footer class="article-footer">
+                <div class="article-tags">
+                    <span class="article-tags-label">Topics:</span>
+                    <a href="#" class="badge badge-secondary">PySide</a>
+                    <a href="#" class="badge badge-secondary">MVC</a>
+                    <a href="#" class="badge badge-secondary">Qt</a>
+                    <a href="#" class="badge badge-secondary">Pipeline</a>
+                    <a href="#" class="badge badge-secondary">Python</a>
+                </div>
+
+                <div class="article-share">
+                    <span class="article-share-label">Share:</span>
+                    <button class="btn btn-ghost btn-sm share-btn" data-share="twitter" title="Share on Twitter">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </button>
+                    <button class="btn btn-ghost btn-sm share-btn" data-share="linkedin" title="Share on LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </button>
+                    <button class="btn btn-ghost btn-sm share-btn" data-share="copy" title="Copy link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="author-card">
+                    <div class="avatar avatar-lg">
+                        <span class="avatar-fallback">AC</span>
+                    </div>
+                    <div class="author-card-content">
+                        <h4 class="author-card-name">Alejandro Cabrera</h4>
+                        <p class="author-card-bio">
+                            Pipeline TD and Software Developer based in Canada. Building tools for VFX pipelines and cloud infrastructure.
+                        </p>
+                        <div class="author-card-links">
+                            <a href="https://twitter.com/tv01d" class="btn btn-sm btn-ghost">Twitter</a>
+                            <a href="https://github.com/voidreamer" class="btn btn-sm btn-ghost">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="article-nav">
+                    <a href="github-actions-patterns.html" class="article-nav-link article-nav-prev">
+                        <span class="article-nav-label">Previous</span>
+                        <span class="article-nav-title">GitHub Actions Patterns I Keep Reusing</span>
+                    </a>
+                    <a href="automating-shot-pipeline.html" class="article-nav-link article-nav-next">
+                        <span class="article-nav-label">Next</span>
+                        <span class="article-nav-title">From Maya Export to Render-Ready Houdini Scene</span>
+                    </a>
+                </nav>
+            </footer>
+        </article>
+
+        <footer class="p-footer">
+            <div class="p-footer-left">
+                <span class="cryptic-label">系統終端</span>
+                <span>Built with care, 2026</span>
+            </div>
+            <div class="p-footer-right">
+                <a href="https://twitter.com/tv01d">Twitter</a>
+                <a href="https://github.com/voidreamer">GitHub</a>
+            </div>
+        </footer>
+    </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../app.js"></script>
+</body>
+</html>

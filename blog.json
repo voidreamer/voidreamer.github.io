@@ -1,8 +1,26 @@
 [
   {
+    "id": "automating-shot-pipeline",
+    "title": "From Maya Export to Render-Ready Houdini Scene",
+    "excerpt": "How we automated the chain from Maya USD animation export through headless Houdini scene building to render farm submission, saving 30 minutes per shot.",
+    "date": "2026-02-04",
+    "category": "Pipeline",
+    "categoryColor": "peach",
+    "url": "blog/automating-shot-pipeline.html"
+  },
+  {
+    "id": "mvc-pyside-dcc-tools",
+    "title": "MVC in DCC Tools: Why Your Data Model Matters",
+    "excerpt": "How separating data models from UI in PySide2 made our asset browser maintainable, testable, and portable across Maya, Houdini, and Nuke.",
+    "date": "2026-02-03",
+    "category": "Pipeline",
+    "categoryColor": "peach",
+    "url": "blog/mvc-pyside-dcc-tools.html"
+  },
+  {
     "id": "github-actions-patterns",
     "title": "GitHub Actions Patterns I Keep Reusing",
-    "excerpt": "The CI/CD workflows I copy between projects: S3 deploys with CloudFront invalidation, Lambda packaging, Rust CI, and staging vs production branch patterns.",
+    "excerpt": "Real CI/CD workflows from shipping side projects: S3 deploys, Lambda packaging, Rust CI, and branch-based environments.",
     "date": "2026-01-28",
     "category": "Infrastructure",
     "categoryColor": "moss",
@@ -11,7 +29,7 @@
   {
     "id": "terraform-side-projects",
     "title": "Terraform for Side Projects: Cheaper Than You Think",
-    "excerpt": "How I use Terraform to deploy full-stack side projects on AWS for a few dollars a month. API Gateway, Lambda, DynamoDB, CloudFront, and the patterns that make it painless.",
+    "excerpt": "Running three full-stack apps on AWS for under $5/month with Terraform. API Gateway, Lambda, DynamoDB, CloudFront, and why IaC is worth it even for small projects.",
     "date": "2026-01-21",
     "category": "Infrastructure",
     "categoryColor": "moss",
@@ -20,7 +38,7 @@
   {
     "id": "usd-production-pitfalls",
     "title": "USD Pitfalls I Hit in Production",
-    "excerpt": "Real USD gotchas from production work and building a linter. Composition arcs, defaultPrim, opinion strength, and the things that will quietly break your pipeline.",
+    "excerpt": "Real gotchas from working with OpenUSD on VFX shows: defaultPrim, composition arc ordering, LIVRPS confusion, and why I ended up building a linter.",
     "date": "2026-01-14",
     "category": "Pipeline",
     "categoryColor": "peach",
@@ -29,7 +47,7 @@
   {
     "id": "rust-for-pipeline-clis",
     "title": "Why Rust Makes Sense for Pipeline CLIs",
-    "excerpt": "Python is the default language in VFX, but for CLI tools that need to ship as single binaries, Rust has real advantages. Here is what I learned building two pipeline tools in Rust.",
+    "excerpt": "Single static binaries, no runtime dependencies, millisecond startup. How Rust solved the distribution problem for VFX pipeline tools.",
     "date": "2026-01-07",
     "category": "Rust",
     "categoryColor": "sand",
@@ -38,7 +56,7 @@
   {
     "id": "cross-dcc-communication",
     "title": "Cross-DCC Communication in VFX: What Actually Works",
-    "excerpt": "Building tools that work across Maya, Houdini, and Nuke. The patterns, pitfalls, and practical solutions from real production experience.",
+    "excerpt": "Building tools that work across Maya, Houdini, and Nuke. Adapter patterns, shared PySide UI, and the gotchas that bit us in production.",
     "date": "2025-12-30",
     "category": "Pipeline",
     "categoryColor": "peach",
