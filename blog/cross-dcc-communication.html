@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross-DCC Communication in VFX: What Actually Works | Alejandro Cabrera</title>
+
+    <meta name="description" content="Building tools that work across Maya, Houdini, and Nuke. The patterns, pitfalls, and practical solutions from real production experience.">
+    <meta name="author" content="Alejandro Cabrera">
+    <meta name="keywords" content="VFX, pipeline, Maya, Houdini, Nuke, DCC, Python, PySide">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Cross-DCC Communication in VFX: What Actually Works">
+    <meta property="og:description" content="Building tools that work across Maya, Houdini, and Nuke. The patterns, pitfalls, and practical solutions from real production experience.">
+    <meta property="article:published_time" content="2025-12-30">
+    <meta property="article:author" content="Alejandro Cabrera">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cross-DCC Communication in VFX: What Actually Works">
+
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../components.css">
+    <link rel="stylesheet" href="../portfolio.css">
+    <link rel="stylesheet" href="../blog.css">
+</head>
+<body>
+
+<div class="reading-progress" id="reading-progress"></div>
+
+<div class="layout">
+    <aside class="rail">
+        <a href="../index.html" class="rail-logo">AC</a>
+        <nav class="rail-nav">
+            <a href="../index.html" class="rail-link" title="Home">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </a>
+            <a href="../index.html#blog" class="rail-link active" title="Blog">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+                    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+                    <path d="M2 2l7.586 7.586"/>
+                    <circle cx="11" cy="11" r="2"/>
+                </svg>
+            </a>
+        </nav>
+        <div class="rail-cryptic">記事</div>
+    </aside>
+
+    <main class="main">
+        <article class="blog-article">
+            <header class="article-header">
+                <nav class="article-breadcrumb">
+                    <a href="../index.html">Home</a>
+                    <span>/</span>
+                    <a href="../index.html#blog">Blog</a>
+                    <span>/</span>
+                    <span>Cross-DCC Communication</span>
+                </nav>
+
+                <div class="article-meta-top">
+                    <span class="badge badge-peach">Pipeline</span>
+                    <span class="article-reading-time" id="reading-time">6 min read</span>
+                </div>
+
+                <h1 class="article-title">Cross-DCC Communication in VFX: What Actually Works</h1>
+
+                <p class="article-subtitle">
+                    Building tools that work across Maya, Houdini, and Nuke. The patterns, pitfalls, and practical solutions from real production experience.
+                </p>
+
+                <div class="article-author">
+                    <div class="avatar avatar-sm">
+                        <span class="avatar-fallback">AC</span>
+                    </div>
+                    <div class="article-author-info">
+                        <span class="article-author-name">Alejandro Cabrera</span>
+                        <time class="article-date" datetime="2025-12-30">December 30, 2025</time>
+                    </div>
+                </div>
+            </header>
+
+            <nav class="article-toc" id="toc">
+                <h4 class="toc-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <line x1="8" y1="6" x2="21" y2="6"/>
+                        <line x1="8" y1="12" x2="21" y2="12"/>
+                        <line x1="8" y1="18" x2="21" y2="18"/>
+                        <line x1="3" y1="6" x2="3.01" y2="6"/>
+                        <line x1="3" y1="12" x2="3.01" y2="12"/>
+                        <line x1="3" y1="18" x2="3.01" y2="18"/>
+                    </svg>
+                    Contents
+                </h4>
+                <ul class="toc-list">
+                    <li><a href="#the-problem" class="toc-link">The Problem</a></li>
+                    <li><a href="#three-apis" class="toc-link">Three DCCs, Three APIs</a></li>
+                    <li><a href="#the-adapter-pattern" class="toc-link">The Adapter Pattern</a></li>
+                    <li><a href="#camera-rerack" class="toc-link">The Camera Rerack Tool</a></li>
+                    <li><a href="#pyside-consistency" class="toc-link">PySide as the Constant</a></li>
+                    <li><a href="#real-gotchas" class="toc-link">Real Gotchas</a></li>
+                    <li><a href="#what-i-would-do-differently" class="toc-link">What I Would Do Differently</a></li>
+                </ul>
+            </nav>
+
+            <div class="article-content" id="article-content">
+                <section id="the-problem">
+                    <p class="lead">
+                        At some point, every VFX pipeline TD gets asked to build a tool that works in Maya, Houdini, and Nuke. It sounds straightforward until you actually sit down and try it. Each DCC has its own Python API, its own event model, its own opinions about how things should work. What you end up building is less a "tool" and more a small translation layer between three different worlds.
+                    </p>
+
+                    <p>
+                        I spent about three years doing this at Ghost VFX, and I want to share the patterns that actually held up in production. Not the theoretical stuff you read in conference slides, but the things that survived contact with 40+ artists using your tools every day.
+                    </p>
+                </section>
+
+                <section id="three-apis">
+                    <h2>Three DCCs, Three APIs</h2>
+
+                    <p>
+                        The first thing you realize is that Maya, Houdini, and Nuke have fundamentally different approaches to their Python APIs. Maya gives you <code>maya.cmds</code> for basic stuff and <code>OpenMaya</code> for anything serious. Houdini has <code>hou</code>, which is actually pretty well-designed but comes with its own quirks around Python versioning. Nuke has a deceptively simple API that hides some nasty single-threaded behavior.
+                    </p>
+
+                    <p>
+                        Just getting a camera's focal length looks different in each one:
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <button class="code-copy" data-copy="code-1" title="Copy code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="code-1"># Maya
+focal = cmds.getAttr("cameraShape1.focalLength")
+
+# Houdini
+cam = hou.node("/obj/cam1")
+focal = cam.parm("focal").eval()
+
+# Nuke
+cam = nuke.toNode("Camera1")
+focal = cam["focal"].value()</code></pre>
+                    </div>
+
+                    <p>
+                        Three ways to get the same number. And that is the simple case. Once you start dealing with animation curves, coordinate systems, or scene hierarchy, the differences multiply fast.
+                    </p>
+                </section>
+
+                <section id="the-adapter-pattern">
+                    <h2>The Adapter Pattern</h2>
+
+                    <p>
+                        The pattern that saved us was pretty standard software engineering: define an abstract interface, then write a concrete adapter for each DCC. Your business logic only talks to the interface. It never imports <code>maya.cmds</code> or <code>hou</code> directly.
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <button class="code-copy" data-copy="code-2" title="Copy code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="code-2">from abc import ABC, abstractmethod
+
+class CameraAdapter(ABC):
+    @abstractmethod
+    def get_focal_length(self, camera_name: str) -> float: ...
+
+    @abstractmethod
+    def set_focal_length(self, camera_name: str, value: float): ...
+
+    @abstractmethod
+    def get_transform(self, camera_name: str, frame: int) -> dict: ...
+
+class MayaCameraAdapter(CameraAdapter):
+    def get_focal_length(self, camera_name: str) -> float:
+        import maya.cmds as cmds
+        shape = cmds.listRelatives(camera_name, shapes=True)[0]
+        return cmds.getAttr(f"{shape}.focalLength")
+
+class HoudiniCameraAdapter(CameraAdapter):
+    def get_focal_length(self, camera_name: str) -> float:
+        import hou
+        node = hou.node(camera_name)
+        return node.parm("focal").eval()</code></pre>
+                    </div>
+
+                    <p>
+                        We had a factory function that detected which DCC was running and returned the right adapter. The detection was simple: try importing each DCC module and see which one succeeds.
+                    </p>
+
+                    <p>
+                        This pattern is not fancy. Anyone who has read a design patterns book will recognize it immediately. But the value in VFX is that it forces you to think carefully about what the shared interface should look like before you start coding. That upfront design work pays for itself ten times over.
+                    </p>
+                </section>
+
+                <section id="camera-rerack">
+                    <h2>The Camera Rerack Tool</h2>
+
+                    <p>
+                        The biggest cross-DCC tool I built was a camera rerack system. The idea is straightforward: you have a camera from one department (usually layout, working in Maya) and you need to apply adjustments to it in another DCC (compositing in Nuke, or FX in Houdini) while preserving the animation data.
+                    </p>
+
+                    <p>
+                        The tricky part is that each DCC represents transforms differently. Maya uses a transform node with separate rotate orders. Houdini has its own transform stack with pre-transforms. Nuke flattens everything into a 4x4 matrix per frame. You cannot just copy values between them. You need to extract the camera data into a neutral format and then reconstruct it on the other side.
+                    </p>
+
+                    <p>
+                        We settled on baking everything to world-space matrices at each frame and storing them in a simple JSON format. Lossy? Slightly. But it worked reliably, which matters more than theoretical purity when you have a show deadline.
+                    </p>
+                </section>
+
+                <section id="pyside-consistency">
+                    <h2>PySide as the Constant</h2>
+
+                    <p>
+                        One thing that stays relatively consistent across DCCs is PySide. Maya ships with PySide2 (or PySide6 in newer versions), Houdini has PySide2, and Nuke has PySide2. The Qt API is basically the same everywhere. This means your UI code can be almost entirely shared.
+                    </p>
+
+                    <p>
+                        I built an asset browser with PySide2 that ran in all three DCCs. The UI was identical. The only DCC-specific code was the part that actually loaded or referenced the selected asset. That separation kept the codebase manageable and made it so that artists had a consistent experience no matter which application they were in.
+                    </p>
+
+                    <p>
+                        The one thing to watch out for is parenting your Qt window to the DCC's main window. Each DCC has a different way to get its main window handle. In Maya it is <code>maya.OpenMayaUI.MQtUtil.mainWindow()</code>. In Houdini it is <code>hou.qt.mainWindow()</code>. In Nuke you can usually get away without parenting, but it can cause issues with window focus.
+                    </p>
+                </section>
+
+                <section id="real-gotchas">
+                    <h2>Real Gotchas</h2>
+
+                    <p>
+                        Here are some problems that bit us in production:
+                    </p>
+
+                    <p>
+                        <strong>Maya's two APIs.</strong> <code>maya.cmds</code> is procedural and easy to use, but slow for batch operations. <code>OpenMaya 2.0</code> is faster but completely different in style. We ended up mixing both, using cmds for interactive tools and OpenMaya for anything that touched thousands of nodes.
+                    </p>
+
+                    <p>
+                        <strong>Houdini's Python versioning.</strong> Houdini was one of the first DCCs to ship Python 3, which was great. But it meant our shared library had to support both Python 2 (for older Maya/Nuke) and Python 3 (for Houdini) at the same time. We burned a lot of hours on string encoding issues.
+                    </p>
+
+                    <p>
+                        <strong>Nuke's single-threaded callbacks.</strong> Nuke processes callbacks on its main thread, and it really does not like it when you try to do anything heavy in a callback. We had a tool that would hang Nuke for 30 seconds because it was making HTTP requests inside a knobChanged callback. The fix was to push everything async with QThread, but that introduced its own set of thread-safety issues.
+                    </p>
+
+                    <p>
+                        <strong>Path handling.</strong> This sounds trivial, but file paths are a constant source of bugs. Windows uses backslashes, Linux uses forward slashes. Some DCCs normalize paths, some do not. We ended up with a small path utility that every tool used, and it handled normalization, environment variable expansion, and platform differences.
+                    </p>
+                </section>
+
+                <section id="what-i-would-do-differently">
+                    <h2>What I Would Do Differently</h2>
+
+                    <p>
+                        Looking back, I would invest more time in automated testing. We tested manually by opening each DCC and clicking through the tool. That is slow and error-prone. Setting up headless testing with mayapy and hython would have caught regressions faster. Nuke has nukeassist and command-line rendering too. We just never made the time to set it up properly.
+                    </p>
+
+                    <p>
+                        I would also push harder for a shared data format earlier. We spent too long passing DCC-specific data structures between tools before standardizing on a neutral format. If your data layer is clean, everything on top of it gets simpler.
+                    </p>
+
+                    <p>
+                        Building cross-DCC tools is not glamorous work. You spend a lot of time reading documentation for three different APIs and debugging edge cases that only show up in one application. But when an artist tells you the tool "just works" across all their software, that is a good feeling. The adapter pattern, shared UI with PySide, and a clean data format will get you most of the way there.
+                    </p>
+                </section>
+            </div>
+
+            <footer class="article-footer">
+                <div class="article-tags">
+                    <span class="article-tags-label">Topics:</span>
+                    <a href="#" class="badge badge-secondary">VFX</a>
+                    <a href="#" class="badge badge-secondary">Pipeline</a>
+                    <a href="#" class="badge badge-secondary">Python</a>
+                    <a href="#" class="badge badge-secondary">Maya</a>
+                    <a href="#" class="badge badge-secondary">Houdini</a>
+                </div>
+
+                <div class="article-share">
+                    <span class="article-share-label">Share:</span>
+                    <button class="btn btn-ghost btn-sm share-btn" data-share="twitter" title="Share on Twitter">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </button>
+                    <button class="btn btn-ghost btn-sm share-btn" data-share="linkedin" title="Share on LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </button>
+                    <button class="btn btn-ghost btn-sm share-btn" data-share="copy" title="Copy link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="author-card">
+                    <div class="avatar avatar-lg">
+                        <span class="avatar-fallback">AC</span>
+                    </div>
+                    <div class="author-card-content">
+                        <h4 class="author-card-name">Alejandro Cabrera</h4>
+                        <p class="author-card-bio">
+                            Pipeline TD and Software Developer based in Canada. Building tools for VFX pipelines and cloud infrastructure.
+                        </p>
+                        <div class="author-card-links">
+                            <a href="https://twitter.com/tv01d" class="btn btn-sm btn-ghost">Twitter</a>
+                            <a href="https://github.com/voidreamer" class="btn btn-sm btn-ghost">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="article-nav">
+                    <div class="article-nav-link article-nav-prev" style="visibility: hidden;">
+                        <span class="article-nav-label">Previous</span>
+                        <span class="article-nav-title"></span>
+                    </div>
+                    <a href="rust-for-pipeline-clis.html" class="article-nav-link article-nav-next">
+                        <span class="article-nav-label">Next</span>
+                        <span class="article-nav-title">Why Rust Makes Sense for Pipeline CLIs</span>
+                    </a>
+                </nav>
+            </footer>
+        </article>
+
+        <footer class="p-footer">
+            <div class="p-footer-left">
+                <span class="cryptic-label">系統終端</span>
+                <span>Built with care, 2026</span>
+            </div>
+            <div class="p-footer-right">
+                <a href="https://twitter.com/tv01d">Twitter</a>
+                <a href="https://github.com/voidreamer">GitHub</a>
+            </div>
+        </footer>
+    </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../app.js"></script>
+</body>
+</html>

@@ -1,29 +1,47 @@
 [
   {
-    "id": "usd-workflows-2026",
-    "title": "Modern USD Workflows in VFX Production",
-    "excerpt": "A deep dive into implementing USD pipelines across Maya, Houdini, and Solaris for seamless asset interchange...",
-    "date": "2026-01-20",
+    "id": "github-actions-patterns",
+    "title": "GitHub Actions Patterns I Keep Reusing",
+    "excerpt": "The CI/CD workflows I copy between projects: S3 deploys with CloudFront invalidation, Lambda packaging, Rust CI, and staging vs production branch patterns.",
+    "date": "2026-01-28",
+    "category": "Infrastructure",
+    "categoryColor": "moss",
+    "url": "blog/github-actions-patterns.html"
+  },
+  {
+    "id": "terraform-side-projects",
+    "title": "Terraform for Side Projects: Cheaper Than You Think",
+    "excerpt": "How I use Terraform to deploy full-stack side projects on AWS for a few dollars a month. API Gateway, Lambda, DynamoDB, CloudFront, and the patterns that make it painless.",
+    "date": "2026-01-21",
+    "category": "Infrastructure",
+    "categoryColor": "moss",
+    "url": "blog/terraform-side-projects.html"
+  },
+  {
+    "id": "usd-production-pitfalls",
+    "title": "USD Pitfalls I Hit in Production",
+    "excerpt": "Real USD gotchas from production work and building a linter. Composition arcs, defaultPrim, opinion strength, and the things that will quietly break your pipeline.",
+    "date": "2026-01-14",
     "category": "Pipeline",
     "categoryColor": "peach",
-    "url": "blog/usd-workflows.html"
+    "url": "blog/usd-production-pitfalls.html"
   },
   {
-    "id": "pyside-dcc-tools",
-    "title": "Building Cross-DCC Tools with PySide6",
-    "excerpt": "How to create consistent Qt-based interfaces that work across Maya, Houdini, and Nuke with shared codebases...",
-    "date": "2026-01-12",
-    "category": "Tools",
-    "categoryColor": "moss",
-    "url": "blog/pyside-tools.html"
-  },
-  {
-    "id": "hda-best-practices",
-    "title": "HDA Development Best Practices",
-    "excerpt": "Lessons learned from building production HDAs: versioning, parameters, and artist-friendly interfaces...",
-    "date": "2025-12-28",
-    "category": "Houdini",
+    "id": "rust-for-pipeline-clis",
+    "title": "Why Rust Makes Sense for Pipeline CLIs",
+    "excerpt": "Python is the default language in VFX, but for CLI tools that need to ship as single binaries, Rust has real advantages. Here is what I learned building two pipeline tools in Rust.",
+    "date": "2026-01-07",
+    "category": "Rust",
     "categoryColor": "sand",
-    "url": "blog/hda-practices.html"
+    "url": "blog/rust-for-pipeline-clis.html"
+  },
+  {
+    "id": "cross-dcc-communication",
+    "title": "Cross-DCC Communication in VFX: What Actually Works",
+    "excerpt": "Building tools that work across Maya, Houdini, and Nuke. The patterns, pitfalls, and practical solutions from real production experience.",
+    "date": "2025-12-30",
+    "category": "Pipeline",
+    "categoryColor": "peach",
+    "url": "blog/cross-dcc-communication.html"
   }
 ]

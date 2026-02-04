@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USD Pitfalls I Hit in Production | Alejandro Cabrera</title>
+
+    <meta name="description" content="Real USD gotchas from production work and building a linter. Composition arcs, defaultPrim, opinion strength, and the things that will quietly break your pipeline.">
+    <meta name="author" content="Alejandro Cabrera">
+    <meta name="keywords" content="USD, VFX, pipeline, Solaris, Houdini, production">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="USD Pitfalls I Hit in Production">
+    <meta property="og:description" content="Real USD gotchas from production work and building a linter.">
+    <meta property="article:published_time" content="2026-01-14">
+    <meta property="article:author" content="Alejandro Cabrera">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="USD Pitfalls I Hit in Production">
+
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../components.css">
+    <link rel="stylesheet" href="../portfolio.css">
+    <link rel="stylesheet" href="../blog.css">
+</head>
+<body>
+
+<div class="reading-progress" id="reading-progress"></div>
+
+<div class="layout">
+    <aside class="rail">
+        <a href="../index.html" class="rail-logo">AC</a>
+        <nav class="rail-nav">
+            <a href="../index.html" class="rail-link" title="Home">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </a>
+            <a href="../index.html#blog" class="rail-link active" title="Blog">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+                    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+                    <path d="M2 2l7.586 7.586"/>
+                    <circle cx="11" cy="11" r="2"/>
+                </svg>
+            </a>
+        </nav>
+        <div class="rail-cryptic">記事</div>
+    </aside>
+
+    <main class="main">
+        <article class="blog-article">
+            <header class="article-header">
+                <nav class="article-breadcrumb">
+                    <a href="../index.html">Home</a>
+                    <span>/</span>
+                    <a href="../index.html#blog">Blog</a>
+                    <span>/</span>
+                    <span>USD Production Pitfalls</span>
+                </nav>
+
+                <div class="article-meta-top">
+                    <span class="badge badge-peach">Pipeline</span>
+                    <span class="article-reading-time" id="reading-time">7 min read</span>
+                </div>
+
+                <h1 class="article-title">USD Pitfalls I Hit in Production</h1>
+
+                <p class="article-subtitle">
+                    Real USD gotchas from production work and building a linter. Composition arcs, defaultPrim, opinion strength, and the things that will quietly break your pipeline.
+                </p>
+
+                <div class="article-author">
+                    <div class="avatar avatar-sm">
+                        <span class="avatar-fallback">AC</span>
+                    </div>
+                    <div class="article-author-info">
+                        <span class="article-author-name">Alejandro Cabrera</span>
+                        <time class="article-date" datetime="2026-01-14">January 14, 2026</time>
+                    </div>
+                </div>
+            </header>
+
+            <nav class="article-toc" id="toc">
+                <h4 class="toc-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <line x1="8" y1="6" x2="21" y2="6"/>
+                        <line x1="8" y1="12" x2="21" y2="12"/>
+                        <line x1="8" y1="18" x2="21" y2="18"/>
+                        <line x1="3" y1="6" x2="3.01" y2="6"/>
+                        <line x1="3" y1="12" x2="3.01" y2="12"/>
+                        <line x1="3" y1="18" x2="3.01" y2="18"/>
+                    </svg>
+                    Contents
+                </h4>
+                <ul class="toc-list">
+                    <li><a href="#intro" class="toc-link">The Hard Way</a></li>
+                    <li><a href="#defaultprim" class="toc-link">The defaultPrim Trap</a></li>
+                    <li><a href="#prepend-vs-append" class="toc-link">Prepend vs Append Actually Matters</a></li>
+                    <li><a href="#livrps" class="toc-link">Nobody Understands LIVRPS</a></li>
+                    <li><a href="#opinion-strength" class="toc-link">Opinion Strength Debugging</a></li>
+                    <li><a href="#namespace-collisions" class="toc-link">Namespace Collisions</a></li>
+                    <li><a href="#layer-complexity" class="toc-link">Layer Stack Complexity</a></li>
+                    <li><a href="#the-linter" class="toc-link">Building a Linter for This</a></li>
+                </ul>
+            </nav>
+
+            <div class="article-content" id="article-content">
+                <section id="intro">
+                    <p class="lead">
+                        USD is one of those technologies where the documentation makes everything sound clean and logical, and then you actually use it in production and discover all the ways things can go wrong silently. I spent about three years working with USD at Ghost VFX, building Solaris tooling and HDAs, and then I built a linter to catch the mistakes I kept seeing. Here are the pitfalls that cost us the most time.
+                    </p>
+                </section>
+
+                <section id="defaultprim">
+                    <h2>The defaultPrim Trap</h2>
+
+                    <p>
+                        This is the most common USD mistake I have seen, and it is the first rule in usd-lint. Every USD file that will be referenced by another file needs a <code>defaultPrim</code> set in its layer metadata. Without it, the referencing layer does not know which prim to pull in.
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">USD</span>
+                            <button class="code-copy" data-copy="code-1" title="Copy code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="code-1">#usda 1.0
+(
+    defaultPrim = "CharacterA"
+)
+
+def Xform "CharacterA" {
+    def Mesh "body" { ... }
+    def Mesh "eyes" { ... }
+}
+
+def Xform "RigData" {
+    # Helper data that should NOT be the default
+}</code></pre>
+                    </div>
+
+                    <p>
+                        The tricky part is that things seem to work without it in some contexts. If you open the file directly in usdview, you see all the prims just fine. It is only when another file references it that you get an empty result. And the error message is not great. You just get a missing prim, and if you do not know about defaultPrim, you might spend an hour looking at the wrong thing.
+                    </p>
+
+                    <p>
+                        Artists rarely set this manually. Your publish tool should handle it. But if an artist exports a USD file from Houdini and drops it into a shot, that defaultPrim is probably not there. This bit us at least once a month.
+                    </p>
+                </section>
+
+                <section id="prepend-vs-append">
+                    <h2>Prepend vs Append Actually Matters</h2>
+
+                    <p>
+                        When you add a reference or a sublayer in USD, you can prepend or append it. The difference controls which opinions win in the composition. Prepended arcs have stronger opinions than appended ones.
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">USD</span>
+                            <button class="code-copy" data-copy="code-2" title="Copy code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="code-2"># These are NOT the same:
+prepend references = @./look_dev.usd@
+append references = @./look_dev.usd@</code></pre>
+                    </div>
+
+                    <p>
+                        Most of the time, you want <code>prepend</code> for references and sublayers, because you want the new arc's opinions to override whatever was there before. This is actually the default behavior in most Houdini LOPs and the Python API. But when someone hand-edits a USDA file or uses a script that explicitly sets <code>append</code>, they get the opposite behavior and the resulting compose does not look right.
+                    </p>
+
+                    <p>
+                        I had a case where a lookdev artist published materials that were not showing up on the asset in the shot. The reference was being appended, so the shot-level material assignments (which were empty defaults) were winning over the actual lookdev. It took us a while to figure out because the file looked correct at first glance. You had to understand the composition order to see the issue.
+                    </p>
+                </section>
+
+                <section id="livrps">
+                    <h2>Nobody Understands LIVRPS</h2>
+
+                    <p>
+                        LIVRPS is the acronym for USD's composition arc strength ordering: Local, Inherits, Variants, References, Payloads, Specializes. This is the rule that determines which opinion wins when multiple arcs contribute values to the same attribute.
+                    </p>
+
+                    <p>
+                        In theory, every TD working with USD should know this. In practice, I have met maybe three people outside of Pixar who can explain it from memory and actually apply it when debugging. Most artists and even many TDs just try things until the scene looks right, without understanding why one configuration works and another does not.
+                    </p>
+
+                    <p>
+                        The most confusing part is that Inherits is stronger than References. If you have an inherit arc and a reference arc both setting the same attribute, the inherit wins. This is counterintuitive to a lot of people who think of references as the "main" way to bring in data. I have seen pipelines where someone used inherits thinking it was basically an alias for references, and then could not figure out why overrides were not working as expected.
+                    </p>
+
+                    <div class="callout callout-info">
+                        <div class="callout-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="16" x2="12" y2="12"/>
+                                <line x1="12" y1="8" x2="12.01" y2="8"/>
+                            </svg>
+                            Quick Reference
+                        </div>
+                        <p>
+                            LIVRPS strength order, strongest to weakest: <strong>L</strong>ocal opinions, <strong>I</strong>nherits, <strong>V</strong>ariants, <strong>R</strong>eferences, <strong>P</strong>ayloads, <strong>S</strong>pecializes. Local always wins.
+                        </p>
+                    </div>
+                </section>
+
+                <section id="opinion-strength">
+                    <h2>Opinion Strength Debugging</h2>
+
+                    <p>
+                        When something looks wrong in a composed USD stage, the question is always: "Where is this value coming from?" The <code>UsdUtils.GetPrimAtPathWithForwarding</code> family of functions and the composition inspector in usdview help, but they are not always enough.
+                    </p>
+
+                    <p>
+                        The real problem is that opinion strength is not visible. You cannot look at a composed stage and easily tell which layer contributed which value. You can use <code>Usd.Stage.GetEditTarget()</code> and <code>prim.GetAttribute("myAttr").GetResolveInfo()</code> to trace things back, but it requires writing Python scripts to dig through the layer stack.
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <button class="code-copy" data-copy="code-3" title="Copy code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="code-3">from pxr import Usd, UsdResolve
+
+stage = Usd.Stage.Open("shot.usd")
+prim = stage.GetPrimAtPath("/World/CharacterA/body")
+attr = prim.GetAttribute("primvars:displayColor")
+
+# Which layer is this value actually coming from?
+resolve_info = attr.GetResolveInfo()
+print(f"Source layer: {resolve_info.GetLayer().identifier}")
+print(f"Source path: {resolve_info.GetPrimPath()}")</code></pre>
+                    </div>
+
+                    <p>
+                        I ended up writing a small debugging tool that printed the full opinion stack for a given attribute: every layer that had an opinion, in strength order, with the actual values. It was ugly, but it saved us hours every time someone had a "my material is not showing up" problem.
+                    </p>
+                </section>
+
+                <section id="namespace-collisions">
+                    <h2>Namespace Collisions</h2>
+
+                    <p>
+                        USD uses paths like <code>/World/Characters/HeroA</code>, and when you reference one file into another, the prims from the referenced file get placed under whatever prim you attach the reference to. If two departments both create prims with the same name, you get namespace collisions.
+                    </p>
+
+                    <p>
+                        This sounds obvious, but it happens all the time. An animator creates a locator called "pivot" under the character prim. A rigger also creates something called "pivot" in the rig file. When both get composed into the shot, one overwrites the other, or you get unexpected composition behavior.
+                    </p>
+
+                    <p>
+                        Our convention was to prefix department-specific prims with the department name: <code>anim_pivot</code>, <code>rig_pivot</code>. Not elegant, but effective. The linter checks for common unprefixed names that are likely to collide.
+                    </p>
+                </section>
+
+                <section id="layer-complexity">
+                    <h2>Layer Stack Complexity</h2>
+
+                    <p>
+                        USD makes it very easy to create deeply nested layer stacks. Your shot file sublayers a sequence-level override. That sublayers a show-level default. Each asset has multiple layers for model, rig, materials, and animation. A typical production shot can have 50-100 layers in its full composition.
+                    </p>
+
+                    <p>
+                        This is powerful, but it also means performance can degrade in ways that are hard to predict. Opening a stage triggers resolution of the entire layer stack, and if those layers are on a network filesystem, you are making dozens of filesystem lookups before the stage is even loaded.
+                    </p>
+
+                    <p>
+                        We saw shot load times go from 5 seconds to 30 seconds after a few months of production because the layer stacks kept growing. The fix was to flatten certain intermediate layers during publishing, reducing the live composition depth. But flattening has its own tradeoffs because you lose the ability to update upstream layers without republishing.
+                    </p>
+
+                    <p>
+                        There is no perfect solution here. The lesson is to think about your layer stack depth as a performance concern from day one, not something you optimize later.
+                    </p>
+                </section>
+
+                <section id="the-linter">
+                    <h2>Building a Linter for This</h2>
+
+                    <p>
+                        After hitting these problems enough times, I decided to build usd-lint. The idea is simple: run it on your USDA files before publish and catch the common mistakes before they hit production. It checks for missing defaultPrim, suspicious append vs prepend usage, unprefixed prim names in certain contexts, and a few other patterns.
+                    </p>
+
+                    <p>
+                        I wrote it in Rust because I wanted it to be fast enough to run in CI on every commit without slowing down the pipeline. It processes a typical production USDA file in under 10 milliseconds, so running it on hundreds of files during a publish is not noticeable.
+                    </p>
+
+                    <p>
+                        The tool does not replace understanding USD. You still need to know LIVRPS and composition behavior. But it catches the mechanical mistakes, the ones where you just forgot something or typo-ed a path. And honestly, those mechanical mistakes are what cost us the most time because they are hard to spot by eye in a text file full of nested braces.
+                    </p>
+
+                    <p>
+                        If you are working with USD in production, I would strongly recommend building or adopting some kind of validation step. Even a simple Python script that checks for defaultPrim on every published asset file would have saved us dozens of hours over the course of a show. The problems in this post are not exotic edge cases. They are things that happen every week on a busy production, and catching them early makes everyone's life easier.
+                    </p>
+                </section>
+            </div>
+
+            <footer class="article-footer">
+                <div class="article-tags">
+                    <span class="article-tags-label">Topics:</span>
+                    <a href="#" class="badge badge-secondary">USD</a>
+                    <a href="#" class="badge badge-secondary">VFX</a>
+                    <a href="#" class="badge badge-secondary">Pipeline</a>
+                    <a href="#" class="badge badge-secondary">Solaris</a>
+                </div>
+
+                <div class="article-share">
+                    <span class="article-share-label">Share:</span>
+                    <button class="btn btn-ghost btn-sm share-btn" data-share="twitter" title="Share on Twitter">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </button>
+                    <button class="btn btn-ghost btn-sm share-btn" data-share="linkedin" title="Share on LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </button>
+                    <button class="btn btn-ghost btn-sm share-btn" data-share="copy" title="Copy link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="author-card">
+                    <div class="avatar avatar-lg">
+                        <span class="avatar-fallback">AC</span>
+                    </div>
+                    <div class="author-card-content">
+                        <h4 class="author-card-name">Alejandro Cabrera</h4>
+                        <p class="author-card-bio">
+                            Pipeline TD and Software Developer based in Canada. Building tools for VFX pipelines and cloud infrastructure.
+                        </p>
+                        <div class="author-card-links">
+                            <a href="https://twitter.com/tv01d" class="btn btn-sm btn-ghost">Twitter</a>
+                            <a href="https://github.com/voidreamer" class="btn btn-sm btn-ghost">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="article-nav">
+                    <a href="rust-for-pipeline-clis.html" class="article-nav-link article-nav-prev">
+                        <span class="article-nav-label">Previous</span>
+                        <span class="article-nav-title">Why Rust Makes Sense for Pipeline CLIs</span>
+                    </a>
+                    <a href="terraform-side-projects.html" class="article-nav-link article-nav-next">
+                        <span class="article-nav-label">Next</span>
+                        <span class="article-nav-title">Terraform for Side Projects: Cheaper Than You Think</span>
+                    </a>
+                </nav>
+            </footer>
+        </article>
+
+        <footer class="p-footer">
+            <div class="p-footer-left">
+                <span class="cryptic-label">系統終端</span>
+                <span>Built with care, 2026</span>
+            </div>
+            <div class="p-footer-right">
+                <a href="https://twitter.com/tv01d">Twitter</a>
+                <a href="https://github.com/voidreamer">GitHub</a>
+            </div>
+        </footer>
+    </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../app.js"></script>
+</body>
+</html>

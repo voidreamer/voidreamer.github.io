@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Actions Patterns I Keep Reusing | Alejandro Cabrera</title>
+
+    <meta name="description" content="The CI/CD workflows I copy between projects: S3 deploys with CloudFront invalidation, Lambda packaging, Rust CI, and staging vs production branch patterns.">
+    <meta name="author" content="Alejandro Cabrera">
+    <meta name="keywords" content="GitHub Actions, CI/CD, deployment, AWS, Rust, automation">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="GitHub Actions Patterns I Keep Reusing">
+    <meta property="og:description" content="The CI/CD workflows I copy between projects.">
+    <meta property="article:published_time" content="2026-01-28">
+    <meta property="article:author" content="Alejandro Cabrera">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="GitHub Actions Patterns I Keep Reusing">
+
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../components.css">
+    <link rel="stylesheet" href="../portfolio.css">
+    <link rel="stylesheet" href="../blog.css">
+</head>
+<body>
+
+<div class="reading-progress" id="reading-progress"></div>
+
+<div class="layout">
+    <aside class="rail">
+        <a href="../index.html" class="rail-logo">AC</a>
+        <nav class="rail-nav">
+            <a href="../index.html" class="rail-link" title="Home">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </a>
+            <a href="../index.html#blog" class="rail-link active" title="Blog">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+                    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+                    <path d="M2 2l7.586 7.586"/>
+                    <circle cx="11" cy="11" r="2"/>
+                </svg>
+            </a>
+        </nav>
+        <div class="rail-cryptic">記事</div>
+    </aside>
+
+    <main class="main">
+        <article class="blog-article">
+            <header class="article-header">
+                <nav class="article-breadcrumb">
+                    <a href="../index.html">Home</a>
+                    <span>/</span>
+                    <a href="../index.html#blog">Blog</a>
+                    <span>/</span>
+                    <span>GitHub Actions Patterns</span>
+                </nav>
+
+                <div class="article-meta-top">
+                    <span class="badge badge-moss">Infrastructure</span>
+                    <span class="article-reading-time" id="reading-time">7 min read</span>
+                </div>
+
+                <h1 class="article-title">GitHub Actions Patterns I Keep Reusing</h1>
+
+                <p class="article-subtitle">
+                    The CI/CD workflows I copy between projects: S3 deploys with CloudFront invalidation, Lambda packaging, Rust CI, and staging vs production branch patterns.
+                </p>
+
+                <div class="article-author">
+                    <div class="avatar avatar-sm">
+                        <span class="avatar-fallback">AC</span>
+                    </div>
+                    <div class="article-author-info">
+                        <span class="article-author-name">Alejandro Cabrera</span>
+                        <time class="article-date" datetime="2026-01-28">January 28, 2026</time>
+                    </div>
+                </div>
+            </header>
+
+            <nav class="article-toc" id="toc">
+                <h4 class="toc-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <line x1="8" y1="6" x2="21" y2="6"/>
+                        <line x1="8" y1="12" x2="21" y2="12"/>
+                        <line x1="8" y1="18" x2="21" y2="18"/>
+                        <line x1="3" y1="6" x2="3.01" y2="6"/>
+                        <line x1="3" y1="12" x2="3.01" y2="12"/>
+                        <line x1="3" y1="18" x2="3.01" y2="18"/>
+                    </svg>
+                    Contents
+                </h4>
+                <ul class="toc-list">
+                    <li><a href="#the-setup" class="toc-link">The Setup</a></li>
+                    <li><a href="#frontend-deploy" class="toc-link">Frontend Deploy to S3 + CloudFront</a></li>
+                    <li><a href="#lambda-deploy" class="toc-link">Lambda Deployment</a></li>
+                    <li><a href="#rust-ci" class="toc-link">Rust CI Pipeline</a></li>
+                    <li><a href="#pr-checks" class="toc-link">PR Checks</a></li>
+                    <li><a href="#branch-strategy" class="toc-link">Branch Strategy</a></li>
+                    <li><a href="#tips" class="toc-link">Things I Learned the Hard Way</a></li>
+                </ul>
+            </nav>
+
+            <div class="article-content" id="article-content">
+                <section id="the-setup">
+                    <p class="lead">
+                        I have a handful of GitHub Actions workflows that I copy almost unchanged between projects. They are not complicated, but getting them right the first time involved a lot of trial and error. Every time I start a new repo, I pull these in, change a few variable names, and the CI/CD is done. Here are the patterns that have worked well for me.
+                    </p>
+                </section>
+
+                <section id="frontend-deploy">
+                    <h2>Frontend Deploy to S3 + CloudFront</h2>
+
+                    <p>
+                        This is the workflow I use most. Push to main, build the React app, sync to S3, invalidate CloudFront. Takes about 90 seconds total, and the site is live.
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">YAML</span>
+                            <button class="code-copy" data-copy="code-1" title="Copy code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="code-1">name: Deploy Frontend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'frontend/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install and build
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ca-central-1
+
+      - name: Sync to S3
+        run: |
+          aws s3 sync frontend/dist/ s3://${{ vars.S3_BUCKET }} \
+            --delete \
+            --cache-control "public, max-age=31536000, immutable" \
+            --exclude "index.html"
+          aws s3 cp frontend/dist/index.html s3://${{ vars.S3_BUCKET }}/index.html \
+            --cache-control "public, max-age=0, must-revalidate"
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ vars.CF_DISTRIBUTION_ID }} \
+            --paths "/*"</code></pre>
+                    </div>
+
+                    <p>
+                        A couple of details here that matter. I set different cache headers for <code>index.html</code> versus everything else. The hashed asset files (JS, CSS, images) get immutable caching since their filenames change on every build. But <code>index.html</code> must always be re-fetched, because it contains the references to the current asset filenames. If you cache <code>index.html</code>, users will keep loading stale JavaScript bundles until the cache expires.
+                    </p>
+
+                    <p>
+                        The <code>paths</code> filter on the trigger means this workflow only runs when files in the <code>frontend/</code> directory change. If I push a backend-only change, the frontend deploy does not fire. This is simple but it saves CI minutes.
+                    </p>
+                </section>
+
+                <section id="lambda-deploy">
+                    <h2>Lambda Deployment</h2>
+
+                    <p>
+                        For the backend, I package the FastAPI app and its dependencies into a zip file and upload it to Lambda. I do not use SAM or the Serverless Framework. Plain zip files work fine for my use case, and they keep the workflow straightforward.
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">YAML</span>
+                            <button class="code-copy" data-copy="code-2" title="Copy code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="code-2">  deploy-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Package Lambda
+        working-directory: backend
+        run: |
+          pip install -r requirements.txt -t package/
+          cp -r app/ package/app/
+          cp mangum_handler.py package/
+          cd package && zip -r ../deploy.zip .
+
+      - name: Deploy to Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name ${{ vars.LAMBDA_NAME }} \
+            --zip-file fileb://backend/deploy.zip</code></pre>
+                    </div>
+
+                    <p>
+                        The packaging step installs dependencies into a <code>package/</code> directory, copies the app code in, and zips it. Nothing fancy. The zip gets uploaded directly to Lambda with the AWS CLI. For a small FastAPI app with maybe 10 dependencies, the zip is around 15MB, well under Lambda's 50MB limit.
+                    </p>
+
+                    <p>
+                        If your dependencies get larger (which happens fast with things like pandas or scipy), you would want to use Lambda layers or container images instead. I have not needed that for my projects yet.
+                    </p>
+                </section>
+
+                <section id="rust-ci">
+                    <h2>Rust CI Pipeline</h2>
+
+                    <p>
+                        For my Rust projects (Anvil, usd-lint), I run a stricter CI pipeline. Rust's toolchain makes it easy to enforce code quality because clippy and rustfmt are built in.
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">YAML</span>
+                            <button class="code-copy" data-copy="code-3" title="Copy code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="code-3">name: Rust CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Format check
+        run: cargo fmt --all -- --check
+
+      - name: Clippy
+        run: cargo clippy --all-targets -- -D warnings
+
+      - name: Tests
+        run: cargo test --all
+
+  build:
+    needs: check
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Build release
+        run: cargo build --release</code></pre>
+                    </div>
+
+                    <p>
+                        The <code>rust-cache</code> action is essential. Without it, every CI run downloads and compiles all dependencies from scratch, which takes several minutes. With caching, incremental builds finish in about 30 seconds.
+                    </p>
+
+                    <p>
+                        I run <code>cargo fmt --check</code> and <code>cargo clippy -D warnings</code> before tests. If the code is not formatted or has lint warnings, the pipeline fails immediately without wasting time compiling and running tests. The <code>-D warnings</code> flag treats all clippy warnings as errors, which keeps the codebase clean.
+                    </p>
+
+                    <p>
+                        For usd-lint specifically, I also have a step that runs the linter itself on a set of test USD files and verifies the output matches expected results. And there is the <code>--format github</code> output mode, which formats warnings so GitHub Actions picks them up as inline annotations. When someone opens a PR that includes a USD file with issues, they see the warnings right on the changed lines.
+                    </p>
+                </section>
+
+                <section id="pr-checks">
+                    <h2>PR Checks</h2>
+
+                    <p>
+                        For Python projects, my PR workflow is simpler:
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">YAML</span>
+                            <button class="code-copy" data-copy="code-4" title="Copy code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="code-4">name: PR Checks
+
+on:
+  pull_request:
+    branches: [main, staging]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Type check
+        run: mypy app/ --ignore-missing-imports
+
+      - name: Tests
+        run: pytest tests/ -v --tb=short</code></pre>
+                    </div>
+
+                    <p>
+                        I switched from flake8 to ruff about a year ago and the speed difference is dramatic. Ruff lints the entire codebase in milliseconds where flake8 took several seconds. For a CI pipeline, every second counts because you want fast feedback on PRs.
+                    </p>
+                </section>
+
+                <section id="branch-strategy">
+                    <h2>Branch Strategy</h2>
+
+                    <p>
+                        My branch setup is straightforward. <code>main</code> deploys to production. <code>staging</code> deploys to the staging environment. Feature branches get PR checks but no deployment.
+                    </p>
+
+                    <p>
+                        The typical flow is: create a feature branch, open a PR against staging, merge after checks pass, verify on staging, then open a PR from staging to main for the production deploy. For small fixes, I sometimes go straight to main, but anything involving API changes or database schema updates goes through staging first.
+                    </p>
+
+                    <p>
+                        The deployment workflows check which branch triggered them and set environment variables accordingly:
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">YAML</span>
+                            <button class="code-copy" data-copy="code-5" title="Copy code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="code-5">on:
+  push:
+    branches: [main, staging]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+    steps:
+      # GitHub Actions environments let you set different
+      # secrets and variables per environment.
+      # Same workflow, different targets.
+      - name: Deploy
+        run: |
+          echo "Deploying to ${{ github.ref_name }}"
+          # vars.S3_BUCKET resolves to the right bucket
+          # based on the environment</code></pre>
+                    </div>
+
+                    <p>
+                        GitHub Actions environments are underrated. You can set different secrets and variables per environment, require manual approval for production deploys, and see deployment history per environment. I do not use the manual approval feature for side projects, but it is there if you need it.
+                    </p>
+                </section>
+
+                <section id="tips">
+                    <h2>Things I Learned the Hard Way</h2>
+
+                    <p>
+                        <strong>Cache everything.</strong> Node modules, pip packages, cargo registry, build artifacts. Without caching, CI runs take three to five times longer. The built-in cache support in setup-node and setup-python makes this almost free to set up.
+                    </p>
+
+                    <p>
+                        <strong>Use path filters.</strong> If your repo has frontend and backend in separate directories, use the <code>paths</code> filter on your triggers so you do not rebuild and deploy the frontend when only the backend changed.
+                    </p>
+
+                    <p>
+                        <strong>Pin your action versions.</strong> Use <code>actions/checkout@v4</code>, not <code>actions/checkout@main</code>. I had a workflow break because a major version bump changed the default behavior of an action. Pinning to a major version tag gives you bug fixes without breaking changes.
+                    </p>
+
+                    <p>
+                        <strong>Keep secrets in GitHub, not in the workflow.</strong> I have seen repos with AWS credentials hardcoded in workflow files. Use GitHub's encrypted secrets. They are masked in logs and scoped to environments.
+                    </p>
+
+                    <p>
+                        <strong>Test your workflow changes in a branch.</strong> When you are editing workflow YAML, push to a feature branch first. If you push broken workflow syntax to main, your production deploy pipeline is broken until you fix it. I have done this exactly once and I do not plan to do it again.
+                    </p>
+
+                    <p>
+                        None of these patterns are revolutionary. They are the boring, reliable stuff that you set up once and then forget about. That is exactly what I want from CI/CD. If I am thinking about my deployment pipeline, something has gone wrong. The best pipeline is the one you never notice because it just works every time you push.
+                    </p>
+                </section>
+            </div>
+
+            <footer class="article-footer">
+                <div class="article-tags">
+                    <span class="article-tags-label">Topics:</span>
+                    <a href="#" class="badge badge-secondary">GitHub Actions</a>
+                    <a href="#" class="badge badge-secondary">CI/CD</a>
+                    <a href="#" class="badge badge-secondary">AWS</a>
+                    <a href="#" class="badge badge-secondary">DevOps</a>
+                </div>
+
+                <div class="article-share">
+                    <span class="article-share-label">Share:</span>
+                    <button class="btn btn-ghost btn-sm share-btn" data-share="twitter" title="Share on Twitter">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </button>
+                    <button class="btn btn-ghost btn-sm share-btn" data-share="linkedin" title="Share on LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </button>
+                    <button class="btn btn-ghost btn-sm share-btn" data-share="copy" title="Copy link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="author-card">
+                    <div class="avatar avatar-lg">
+                        <span class="avatar-fallback">AC</span>
+                    </div>
+                    <div class="author-card-content">
+                        <h4 class="author-card-name">Alejandro Cabrera</h4>
+                        <p class="author-card-bio">
+                            Pipeline TD and Software Developer based in Canada. Building tools for VFX pipelines and cloud infrastructure.
+                        </p>
+                        <div class="author-card-links">
+                            <a href="https://twitter.com/tv01d" class="btn btn-sm btn-ghost">Twitter</a>
+                            <a href="https://github.com/voidreamer" class="btn btn-sm btn-ghost">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="article-nav">
+                    <a href="terraform-side-projects.html" class="article-nav-link article-nav-prev">
+                        <span class="article-nav-label">Previous</span>
+                        <span class="article-nav-title">Terraform for Side Projects: Cheaper Than You Think</span>
+                    </a>
+                    <div class="article-nav-link article-nav-next" style="visibility: hidden;">
+                        <span class="article-nav-label">Next</span>
+                        <span class="article-nav-title"></span>
+                    </div>
+                </nav>
+            </footer>
+        </article>
+
+        <footer class="p-footer">
+            <div class="p-footer-left">
+                <span class="cryptic-label">系統終端</span>
+                <span>Built with care, 2026</span>
+            </div>
+            <div class="p-footer-right">
+                <a href="https://twitter.com/tv01d">Twitter</a>
+                <a href="https://github.com/voidreamer">GitHub</a>
+            </div>
+        </footer>
+    </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../app.js"></script>
+</body>
+</html>

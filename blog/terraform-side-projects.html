@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terraform for Side Projects: Cheaper Than You Think | Alejandro Cabrera</title>
+
+    <meta name="description" content="How I use Terraform to deploy full-stack side projects on AWS for a few dollars a month. API Gateway, Lambda, DynamoDB, CloudFront, and the patterns that make it painless.">
+    <meta name="author" content="Alejandro Cabrera">
+    <meta name="keywords" content="Terraform, AWS, Lambda, infrastructure, side projects, serverless">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Terraform for Side Projects: Cheaper Than You Think">
+    <meta property="og:description" content="How I use Terraform to deploy full-stack side projects on AWS for a few dollars a month.">
+    <meta property="article:published_time" content="2026-01-21">
+    <meta property="article:author" content="Alejandro Cabrera">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Terraform for Side Projects: Cheaper Than You Think">
+
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../components.css">
+    <link rel="stylesheet" href="../portfolio.css">
+    <link rel="stylesheet" href="../blog.css">
+</head>
+<body>
+
+<div class="reading-progress" id="reading-progress"></div>
+
+<div class="layout">
+    <aside class="rail">
+        <a href="../index.html" class="rail-logo">AC</a>
+        <nav class="rail-nav">
+            <a href="../index.html" class="rail-link" title="Home">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </a>
+            <a href="../index.html#blog" class="rail-link active" title="Blog">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+                    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+                    <path d="M2 2l7.586 7.586"/>
+                    <circle cx="11" cy="11" r="2"/>
+                </svg>
+            </a>
+        </nav>
+        <div class="rail-cryptic">記事</div>
+    </aside>
+
+    <main class="main">
+        <article class="blog-article">
+            <header class="article-header">
+                <nav class="article-breadcrumb">
+                    <a href="../index.html">Home</a>
+                    <span>/</span>
+                    <a href="../index.html#blog">Blog</a>
+                    <span>/</span>
+                    <span>Terraform for Side Projects</span>
+                </nav>
+
+                <div class="article-meta-top">
+                    <span class="badge badge-moss">Infrastructure</span>
+                    <span class="article-reading-time" id="reading-time">7 min read</span>
+                </div>
+
+                <h1 class="article-title">Terraform for Side Projects: Cheaper Than You Think</h1>
+
+                <p class="article-subtitle">
+                    How I use Terraform to deploy full-stack side projects on AWS for a few dollars a month. API Gateway, Lambda, DynamoDB, CloudFront, and the patterns that make it painless.
+                </p>
+
+                <div class="article-author">
+                    <div class="avatar avatar-sm">
+                        <span class="avatar-fallback">AC</span>
+                    </div>
+                    <div class="article-author-info">
+                        <span class="article-author-name">Alejandro Cabrera</span>
+                        <time class="article-date" datetime="2026-01-21">January 21, 2026</time>
+                    </div>
+                </div>
+            </header>
+
+            <nav class="article-toc" id="toc">
+                <h4 class="toc-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <line x1="8" y1="6" x2="21" y2="6"/>
+                        <line x1="8" y1="12" x2="21" y2="12"/>
+                        <line x1="8" y1="18" x2="21" y2="18"/>
+                        <line x1="3" y1="6" x2="3.01" y2="6"/>
+                        <line x1="3" y1="12" x2="3.01" y2="12"/>
+                        <line x1="3" y1="18" x2="3.01" y2="18"/>
+                    </svg>
+                    Contents
+                </h4>
+                <ul class="toc-list">
+                    <li><a href="#why-bother" class="toc-link">Why Bother with IaC for Side Projects</a></li>
+                    <li><a href="#the-stack" class="toc-link">The Stack</a></li>
+                    <li><a href="#the-terraform" class="toc-link">What the Terraform Looks Like</a></li>
+                    <li><a href="#staging-production" class="toc-link">Staging vs Production</a></li>
+                    <li><a href="#the-cost" class="toc-link">The Actual Cost</a></li>
+                    <li><a href="#vs-console" class="toc-link">Why Not Just Click Around in the Console</a></li>
+                    <li><a href="#lessons" class="toc-link">Lessons Learned</a></li>
+                </ul>
+            </nav>
+
+            <div class="article-content" id="article-content">
+                <section id="why-bother">
+                    <p class="lead">
+                        A few years ago, I started using Terraform for my personal projects. At first, it felt like overkill. Why would I write infrastructure-as-code for a notes app that maybe five people will use? But after rebuilding the same AWS setup by hand for the third time, and making different mistakes each time, I decided to just codify the thing once and reuse it.
+                    </p>
+
+                    <p>
+                        I now have three projects running on essentially the same Terraform template: SimpleNotes (a note-taking app), BabyLog (a baby tracking app), and HeyVoice (a voice cloning service). They all follow the same architecture, and deploying a new one from scratch takes me about 15 minutes. Most of that time is waiting for CloudFront to propagate.
+                    </p>
+                </section>
+
+                <section id="the-stack">
+                    <h2>The Stack</h2>
+
+                    <p>
+                        Every project follows the same pattern:
+                    </p>
+
+                    <ul>
+                        <li><strong>Frontend:</strong> React app built and deployed to an S3 bucket, served through CloudFront with an ACM certificate for HTTPS.</li>
+                        <li><strong>API:</strong> FastAPI running on Lambda behind API Gateway. The Lambda handles all the API routes.</li>
+                        <li><strong>Database:</strong> DynamoDB for SimpleNotes and HeyVoice, SQLAlchemy with a managed Postgres for BabyLog (though BabyLog started with DynamoDB too).</li>
+                        <li><strong>Storage:</strong> S3 for file uploads. HeyVoice stores generated audio files there.</li>
+                        <li><strong>DNS:</strong> Route53 for domain management, ACM for certificates.</li>
+                    </ul>
+
+                    <p>
+                        This is a pretty standard serverless stack. The key insight is that for small apps, everything except the database is basically free under AWS's free tier, and even after the free tier expires, the costs are tiny because Lambda charges per invocation and a side project gets maybe a few hundred requests a day.
+                    </p>
+                </section>
+
+                <section id="the-terraform">
+                    <h2>What the Terraform Looks Like</h2>
+
+                    <p>
+                        Here is a simplified version of the core Lambda + API Gateway setup. The real version has more error handling and IAM policies, but this captures the pattern:
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">HCL (Terraform)</span>
+                            <button class="code-copy" data-copy="code-1" title="Copy code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="code-1">variable "environment" {
+  description = "Deployment environment"
+  type        = string
+  default     = "prod"
+}
+
+variable "app_name" {
+  type    = string
+  default = "simplenotes"
+}
+
+# Lambda function
+resource "aws_lambda_function" "api" {
+  function_name = "${var.app_name}-api-${var.environment}"
+  handler       = "mangum_handler.handler"
+  runtime       = "python3.12"
+  timeout       = 30
+  memory_size   = 256
+
+  filename         = "../backend/deploy.zip"
+  source_code_hash = filebase64sha256("../backend/deploy.zip")
+
+  role = aws_iam_role.lambda_role.arn
+
+  environment {
+    variables = {
+      ENVIRONMENT    = var.environment
+      DYNAMODB_TABLE = aws_dynamodb_table.main.name
+    }
+  }
+}
+
+# API Gateway
+resource "aws_apigatewayv2_api" "api" {
+  name          = "${var.app_name}-${var.environment}"
+  protocol_type = "HTTP"
+
+  cors_configuration {
+    allow_origins = ["https://${var.domain_name}"]
+    allow_methods = ["GET", "POST", "PUT", "DELETE"]
+    allow_headers = ["Content-Type", "Authorization"]
+  }
+}
+
+resource "aws_apigatewayv2_integration" "lambda" {
+  api_id             = aws_apigatewayv2_api.api.id
+  integration_type   = "AWS_PROXY"
+  integration_uri    = aws_lambda_function.api.invoke_arn
+  payload_format_version = "2.0"
+}
+
+resource "aws_apigatewayv2_route" "default" {
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = "$default"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+}</code></pre>
+                    </div>
+
+                    <p>
+                        The <code>mangum_handler</code> bit is Mangum, a library that wraps FastAPI (or any ASGI app) so it can run inside Lambda. It translates API Gateway events into ASGI requests. This means I write a normal FastAPI app locally and it works on Lambda without any changes to the application code.
+                    </p>
+
+                    <p>
+                        The S3 + CloudFront setup for the frontend is another 40 or so lines. The DynamoDB table is maybe 15 lines. Route53 and ACM add another 20. Total, the whole infrastructure for a project is about 200 lines of Terraform. Not bad for a production-grade setup with HTTPS, CDN, and automatic scaling.
+                    </p>
+                </section>
+
+                <section id="staging-production">
+                    <h2>Staging vs Production</h2>
+
+                    <p>
+                        One thing I do that has saved me multiple times is maintaining separate staging and production environments. With Terraform, this is just a different <code>.tfvars</code> file:
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">HCL</span>
+                            <button class="code-copy" data-copy="code-2" title="Copy code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="code-2"># staging.tfvars
+environment = "staging"
+domain_name = "staging.simplenotes.app"
+
+# production.tfvars
+environment = "prod"
+domain_name = "simplenotes.app"</code></pre>
+                    </div>
+
+                    <p>
+                        I deploy to staging first by running <code>terraform apply -var-file=staging.tfvars</code>. If everything looks good, I apply the same code with <code>production.tfvars</code>. The infrastructure is identical except for the names and domain. Both environments cost basically nothing at side-project traffic levels.
+                    </p>
+
+                    <p>
+                        For HeyVoice, which handles payments through Stripe, having a staging environment is essential. I test the full payment flow with Stripe's test mode before touching production. Without separate environments, I would be testing in production, which is how you accidentally charge real money for test transactions.
+                    </p>
+                </section>
+
+                <section id="the-cost">
+                    <h2>The Actual Cost</h2>
+
+                    <p>
+                        Here is what I actually pay per month across all three projects:
+                    </p>
+
+                    <ul>
+                        <li><strong>Lambda:</strong> Essentially $0. The free tier gives you a million requests per month. My side projects combined do not hit 10,000.</li>
+                        <li><strong>API Gateway:</strong> About $0.10 for HTTP APIs at low traffic.</li>
+                        <li><strong>DynamoDB:</strong> On-demand pricing, which means you pay per read/write. For a notes app, that is a few cents.</li>
+                        <li><strong>S3:</strong> Under $1 for static hosting and file storage.</li>
+                        <li><strong>CloudFront:</strong> Free tier covers the first TB of transfer. I am nowhere near that.</li>
+                        <li><strong>Route53:</strong> $0.50 per hosted zone per month. This is actually the biggest fixed cost.</li>
+                    </ul>
+
+                    <p>
+                        Total: somewhere between $2 and $5 per month per project. HeyVoice is a bit more because it stores audio files in S3 and uses more Lambda compute for the voice generation processing, but it is still under $10. Compare that to a $7/month Heroku dyno or a $5/month DigitalOcean droplet, and you get a more scalable setup for less money.
+                    </p>
+                </section>
+
+                <section id="vs-console">
+                    <h2>Why Not Just Click Around in the Console</h2>
+
+                    <p>
+                        I used to set everything up through the AWS console. It works, but there are two problems.
+                    </p>
+
+                    <p>
+                        First, you forget what you did. Three months later you need to update the Lambda timeout and you cannot remember which IAM role it uses, or where you put the environment variables, or how you configured the API Gateway stages. With Terraform, the configuration is in a file you can read.
+                    </p>
+
+                    <p>
+                        Second, reproducibility. When I started BabyLog, I could copy the Terraform from SimpleNotes, change a few variable names, and have the entire infrastructure up in minutes. Trying to do that by hand through the console takes an hour and you will inevitably miss something.
+                    </p>
+
+                    <p>
+                        The state file is the one thing you need to be careful with. Terraform keeps track of what it has created in a state file, and if you lose that file, Terraform does not know about your existing resources. I keep mine in an S3 bucket with versioning enabled. Some people use Terraform Cloud. Either way, do not keep the state file only on your laptop.
+                    </p>
+                </section>
+
+                <section id="lessons">
+                    <h2>Lessons Learned</h2>
+
+                    <p>
+                        A few things I have learned doing this across three projects:
+                    </p>
+
+                    <p>
+                        <strong>Start with a module.</strong> After the second project, I extracted the common infrastructure into a reusable Terraform module. Lambda + API Gateway + DynamoDB + S3 + CloudFront. Now starting a new project means writing a short root module that calls my shared module with project-specific variables.
+                    </p>
+
+                    <p>
+                        <strong>Use Mangum for FastAPI.</strong> It is the easiest way to get a FastAPI app running on Lambda. You write your app normally, add two lines for the Mangum handler, and it just works. Local development uses uvicorn as usual. The Lambda deployment is a zip file with your dependencies.
+                    </p>
+
+                    <p>
+                        <strong>CloudFront invalidation matters.</strong> When you deploy a new frontend build to S3, CloudFront will keep serving the old version from its cache. You need to create an invalidation after every deploy. I automate this with GitHub Actions, which I will cover in another post.
+                    </p>
+
+                    <p>
+                        <strong>Lock your Terraform version.</strong> I have had deploys break because a Terraform version upgrade changed behavior. Pin the version in your configuration and upgrade intentionally.
+                    </p>
+
+                    <p>
+                        The overhead of setting up Terraform for a side project is maybe an extra hour upfront compared to clicking through the console. But that hour pays for itself the first time you need to rebuild the environment, debug a configuration issue, or spin up a second project. For me, it is now the default for anything I plan to keep running for more than a weekend.
+                    </p>
+                </section>
+            </div>
+
+            <footer class="article-footer">
+                <div class="article-tags">
+                    <span class="article-tags-label">Topics:</span>
+                    <a href="#" class="badge badge-secondary">Terraform</a>
+                    <a href="#" class="badge badge-secondary">AWS</a>
+                    <a href="#" class="badge badge-secondary">Lambda</a>
+                    <a href="#" class="badge badge-secondary">Infrastructure</a>
+                </div>
+
+                <div class="article-share">
+                    <span class="article-share-label">Share:</span>
+                    <button class="btn btn-ghost btn-sm share-btn" data-share="twitter" title="Share on Twitter">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </button>
+                    <button class="btn btn-ghost btn-sm share-btn" data-share="linkedin" title="Share on LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </button>
+                    <button class="btn btn-ghost btn-sm share-btn" data-share="copy" title="Copy link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="author-card">
+                    <div class="avatar avatar-lg">
+                        <span class="avatar-fallback">AC</span>
+                    </div>
+                    <div class="author-card-content">
+                        <h4 class="author-card-name">Alejandro Cabrera</h4>
+                        <p class="author-card-bio">
+                            Pipeline TD and Software Developer based in Canada. Building tools for VFX pipelines and cloud infrastructure.
+                        </p>
+                        <div class="author-card-links">
+                            <a href="https://twitter.com/tv01d" class="btn btn-sm btn-ghost">Twitter</a>
+                            <a href="https://github.com/voidreamer" class="btn btn-sm btn-ghost">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="article-nav">
+                    <a href="usd-production-pitfalls.html" class="article-nav-link article-nav-prev">
+                        <span class="article-nav-label">Previous</span>
+                        <span class="article-nav-title">USD Pitfalls I Hit in Production</span>
+                    </a>
+                    <a href="github-actions-patterns.html" class="article-nav-link article-nav-next">
+                        <span class="article-nav-label">Next</span>
+                        <span class="article-nav-title">GitHub Actions Patterns I Keep Reusing</span>
+                    </a>
+                </nav>
+            </footer>
+        </article>
+
+        <footer class="p-footer">
+            <div class="p-footer-left">
+                <span class="cryptic-label">系統終端</span>
+                <span>Built with care, 2026</span>
+            </div>
+            <div class="p-footer-right">
+                <a href="https://twitter.com/tv01d">Twitter</a>
+                <a href="https://github.com/voidreamer">GitHub</a>
+            </div>
+        </footer>
+    </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../app.js"></script>
+</body>
+</html>
