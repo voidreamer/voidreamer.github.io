@@ -533,16 +533,10 @@
     border-color: var(--moss);
 }
 
-/* Fade-in animation for content sections */
+/* Content sections are visible by default */
 .article-content section {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.article-content section.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
 }
 
 /* ============================================
