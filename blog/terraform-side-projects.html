@@ -95,13 +95,13 @@
                     Contents
                 </h4>
                 <ul class="toc-list">
-                    <li><a href="#why-bother" class="toc-link">Why Bother with IaC for Side Projects</a></li>
-                    <li><a href="#the-stack" class="toc-link">The Stack</a></li>
-                    <li><a href="#the-terraform" class="toc-link">What the Terraform Looks Like</a></li>
-                    <li><a href="#staging-production" class="toc-link">Staging vs Production</a></li>
-                    <li><a href="#the-cost" class="toc-link">The Actual Cost</a></li>
-                    <li><a href="#vs-console" class="toc-link">Why Not Just Click Around in the Console</a></li>
-                    <li><a href="#lessons" class="toc-link">Lessons Learned</a></li>
+                    <li><a href="#why-bother" class="toc-link">Why Bother with IaC for a Side Project</a></li>
+                    <li><a href="#the-stack" class="toc-link">What I Actually Deploy</a></li>
+                    <li><a href="#the-terraform" class="toc-link">A Real Terraform Module</a></li>
+                    <li><a href="#staging-production" class="toc-link">Keeping Staging and Production Apart</a></li>
+                    <li><a href="#the-cost" class="toc-link">My AWS Bill Is Under $5</a></li>
+                    <li><a href="#vs-console" class="toc-link">Console Clicking Does Not Scale</a></li>
+                    <li><a href="#lessons" class="toc-link">Mistakes I Made Along the Way</a></li>
                 </ul>
             </nav>
 
@@ -117,7 +117,7 @@
                 </section>
 
                 <section id="the-stack">
-                    <h2>The Stack</h2>
+                    <h2>What I Actually Deploy</h2>
 
                     <p>
                         Every project follows the same pattern:
@@ -137,7 +137,7 @@
                 </section>
 
                 <section id="the-terraform">
-                    <h2>What the Terraform Looks Like</h2>
+                    <h2>A Real Terraform Module</h2>
 
                     <p>
                         Here is a simplified version of the core Lambda + API Gateway setup. The real version has more error handling and IAM policies, but this captures the pattern:
@@ -258,7 +258,7 @@ domain_name = "simplenotes.app"</code></pre>
                 </section>
 
                 <section id="the-cost">
-                    <h2>The Actual Cost</h2>
+                    <h2>My AWS Bill Is Under $5</h2>
 
                     <p>
                         Here is what I actually pay per month across all three projects:
@@ -299,7 +299,7 @@ domain_name = "simplenotes.app"</code></pre>
                 </section>
 
                 <section id="lessons">
-                    <h2>Lessons Learned</h2>
+                    <h2>Mistakes I Made Along the Way</h2>
 
                     <p>
                         A few things I have learned doing this across three projects:

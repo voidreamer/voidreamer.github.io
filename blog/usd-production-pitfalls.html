@@ -95,14 +95,14 @@
                     Contents
                 </h4>
                 <ul class="toc-list">
-                    <li><a href="#intro" class="toc-link">The Hard Way</a></li>
-                    <li><a href="#defaultprim" class="toc-link">The defaultPrim Trap</a></li>
-                    <li><a href="#prepend-vs-append" class="toc-link">Prepend vs Append Actually Matters</a></li>
-                    <li><a href="#livrps" class="toc-link">Nobody Understands LIVRPS</a></li>
-                    <li><a href="#opinion-strength" class="toc-link">Opinion Strength Debugging</a></li>
-                    <li><a href="#namespace-collisions" class="toc-link">Namespace Collisions</a></li>
-                    <li><a href="#layer-complexity" class="toc-link">Layer Stack Complexity</a></li>
-                    <li><a href="#the-linter" class="toc-link">Building a Linter for This</a></li>
+                    <li><a href="#intro" class="toc-link">Learning USD by Breaking Things</a></li>
+                    <li><a href="#defaultprim" class="toc-link">Forgetting defaultPrim</a></li>
+                    <li><a href="#prepend-vs-append" class="toc-link">prepend vs append Is Not Optional</a></li>
+                    <li><a href="#livrps" class="toc-link">LIVRPS and Why Artists Glaze Over</a></li>
+                    <li><a href="#opinion-strength" class="toc-link">Debugging Opinion Strength Is Painful</a></li>
+                    <li><a href="#namespace-collisions" class="toc-link">Names Collide More Than You Think</a></li>
+                    <li><a href="#layer-complexity" class="toc-link">When Your Layer Stack Gets Deep</a></li>
+                    <li><a href="#the-linter" class="toc-link">So I Built a Linter</a></li>
                 </ul>
             </nav>
 
@@ -114,7 +114,7 @@
                 </section>
 
                 <section id="defaultprim">
-                    <h2>The defaultPrim Trap</h2>
+                    <h2>Forgetting defaultPrim</h2>
 
                     <p>
                         This is the most common USD mistake I have seen, and it is the first rule in usd-lint. Every USD file that will be referenced by another file needs a <code>defaultPrim</code> set in its layer metadata. Without it, the referencing layer does not know which prim to pull in.
@@ -156,7 +156,7 @@ def Xform "RigData" {
                 </section>
 
                 <section id="prepend-vs-append">
-                    <h2>Prepend vs Append Actually Matters</h2>
+                    <h2>prepend vs append Is Not Optional</h2>
 
                     <p>
                         When you add a reference or a sublayer in USD, you can prepend or append it. The difference controls which opinions win in the composition. Prepended arcs have stronger opinions than appended ones.
@@ -188,7 +188,7 @@ append references = @./look_dev.usd@</code></pre>
                 </section>
 
                 <section id="livrps">
-                    <h2>Nobody Understands LIVRPS</h2>
+                    <h2>LIVRPS and Why Artists Glaze Over</h2>
 
                     <p>
                         LIVRPS is the acronym for USD's composition arc strength ordering: Local, Inherits, Variants, References, Payloads, Specializes. This is the rule that determines which opinion wins when multiple arcs contribute values to the same attribute.
@@ -218,7 +218,7 @@ append references = @./look_dev.usd@</code></pre>
                 </section>
 
                 <section id="opinion-strength">
-                    <h2>Opinion Strength Debugging</h2>
+                    <h2>Debugging Opinion Strength Is Painful</h2>
 
                     <p>
                         When something looks wrong in a composed USD stage, the question is always: "Where is this value coming from?" The <code>UsdUtils.GetPrimAtPathWithForwarding</code> family of functions and the composition inspector in usdview help, but they are not always enough.
@@ -257,7 +257,7 @@ print(f"Source path: {resolve_info.GetPrimPath()}")</code></pre>
                 </section>
 
                 <section id="namespace-collisions">
-                    <h2>Namespace Collisions</h2>
+                    <h2>Names Collide More Than You Think</h2>
 
                     <p>
                         USD uses paths like <code>/World/Characters/HeroA</code>, and when you reference one file into another, the prims from the referenced file get placed under whatever prim you attach the reference to. If two departments both create prims with the same name, you get namespace collisions.
@@ -273,7 +273,7 @@ print(f"Source path: {resolve_info.GetPrimPath()}")</code></pre>
                 </section>
 
                 <section id="layer-complexity">
-                    <h2>Layer Stack Complexity</h2>
+                    <h2>When Your Layer Stack Gets Deep</h2>
 
                     <p>
                         USD makes it very easy to create deeply nested layer stacks. Your shot file sublayers a sequence-level override. That sublayers a show-level default. Each asset has multiple layers for model, rig, materials, and animation. A typical production shot can have 50-100 layers in its full composition.
@@ -293,7 +293,7 @@ print(f"Source path: {resolve_info.GetPrimPath()}")</code></pre>
                 </section>
 
                 <section id="the-linter">
-                    <h2>Building a Linter for This</h2>
+                    <h2>So I Built a Linter</h2>
 
                     <p>
                         After hitting these problems enough times, I decided to build usd-lint. The idea is simple: run it on your USDA files before publish and catch the common mistakes before they hit production. It checks for missing defaultPrim, suspicious append vs prepend usage, unprefixed prim names in certain contexts, and a few other patterns.

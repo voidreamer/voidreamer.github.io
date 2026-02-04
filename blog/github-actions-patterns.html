@@ -95,13 +95,13 @@
                     Contents
                 </h4>
                 <ul class="toc-list">
-                    <li><a href="#the-setup" class="toc-link">The Setup</a></li>
-                    <li><a href="#frontend-deploy" class="toc-link">Frontend Deploy to S3 + CloudFront</a></li>
-                    <li><a href="#lambda-deploy" class="toc-link">Lambda Deployment</a></li>
-                    <li><a href="#rust-ci" class="toc-link">Rust CI Pipeline</a></li>
-                    <li><a href="#pr-checks" class="toc-link">PR Checks</a></li>
-                    <li><a href="#branch-strategy" class="toc-link">Branch Strategy</a></li>
-                    <li><a href="#tips" class="toc-link">Things I Learned the Hard Way</a></li>
+                    <li><a href="#the-setup" class="toc-link">How My Projects Are Set Up</a></li>
+                    <li><a href="#frontend-deploy" class="toc-link">Pushing React to S3 + CloudFront</a></li>
+                    <li><a href="#lambda-deploy" class="toc-link">Deploying Lambda Functions</a></li>
+                    <li><a href="#rust-ci" class="toc-link">Rust CI: test, clippy, fmt</a></li>
+                    <li><a href="#pr-checks" class="toc-link">Gating Merges with PR Checks</a></li>
+                    <li><a href="#branch-strategy" class="toc-link">Staging Branch, Production Branch</a></li>
+                    <li><a href="#tips" class="toc-link">Mistakes Worth Sharing</a></li>
                 </ul>
             </nav>
 
@@ -113,7 +113,7 @@
                 </section>
 
                 <section id="frontend-deploy">
-                    <h2>Frontend Deploy to S3 + CloudFront</h2>
+                    <h2>Pushing React to S3 + CloudFront</h2>
 
                     <p>
                         This is the workflow I use most. Push to main, build the React app, sync to S3, invalidate CloudFront. Takes about 90 seconds total, and the site is live.
@@ -189,7 +189,7 @@ jobs:
                 </section>
 
                 <section id="lambda-deploy">
-                    <h2>Lambda Deployment</h2>
+                    <h2>Deploying Lambda Functions</h2>
 
                     <p>
                         For the backend, I package the FastAPI app and its dependencies into a zip file and upload it to Lambda. I do not use SAM or the Serverless Framework. Plain zip files work fine for my use case, and they keep the workflow straightforward.
@@ -240,7 +240,7 @@ jobs:
                 </section>
 
                 <section id="rust-ci">
-                    <h2>Rust CI Pipeline</h2>
+                    <h2>Rust CI: test, clippy, fmt</h2>
 
                     <p>
                         For my Rust projects (Anvil, usd-lint), I run a stricter CI pipeline. Rust's toolchain makes it easy to enforce code quality because clippy and rustfmt are built in.
@@ -316,7 +316,7 @@ jobs:
                 </section>
 
                 <section id="pr-checks">
-                    <h2>PR Checks</h2>
+                    <h2>Gating Merges with PR Checks</h2>
 
                     <p>
                         For Python projects, my PR workflow is simpler:
@@ -368,7 +368,7 @@ jobs:
                 </section>
 
                 <section id="branch-strategy">
-                    <h2>Branch Strategy</h2>
+                    <h2>Staging Branch, Production Branch</h2>
 
                     <p>
                         My branch setup is straightforward. <code>main</code> deploys to production. <code>staging</code> deploys to the staging environment. Feature branches get PR checks but no deployment.
@@ -418,7 +418,7 @@ jobs:
                 </section>
 
                 <section id="tips">
-                    <h2>Things I Learned the Hard Way</h2>
+                    <h2>Mistakes Worth Sharing</h2>
 
                     <p>
                         <strong>Cache everything.</strong> Node modules, pip packages, cargo registry, build artifacts. Without caching, CI runs take three to five times longer. The built-in cache support in setup-node and setup-python makes this almost free to set up.

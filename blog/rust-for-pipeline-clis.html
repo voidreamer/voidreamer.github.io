@@ -95,13 +95,13 @@
                     Contents
                 </h4>
                 <ul class="toc-list">
-                    <li><a href="#the-python-problem" class="toc-link">The Python Problem</a></li>
-                    <li><a href="#why-rust" class="toc-link">Why Rust Specifically</a></li>
-                    <li><a href="#anvil" class="toc-link">Anvil: A Package Manager</a></li>
-                    <li><a href="#usd-lint" class="toc-link">USD Lint</a></li>
-                    <li><a href="#the-ecosystem" class="toc-link">The Ecosystem Helps</a></li>
-                    <li><a href="#learning-curve" class="toc-link">The Learning Curve is Real</a></li>
-                    <li><a href="#when-to-use-it" class="toc-link">When to Use It</a></li>
+                    <li><a href="#the-python-problem" class="toc-link">Python CLI Pain Points</a></li>
+                    <li><a href="#why-rust" class="toc-link">So Why Rust?</a></li>
+                    <li><a href="#anvil" class="toc-link">Anvil: a Package Manager in Rust</a></li>
+                    <li><a href="#usd-lint" class="toc-link">Parsing USD with pest</a></li>
+                    <li><a href="#the-ecosystem" class="toc-link">crates That Do the Heavy Lifting</a></li>
+                    <li><a href="#learning-curve" class="toc-link">It Took Me Three Months to Feel Productive</a></li>
+                    <li><a href="#when-to-use-it" class="toc-link">Pick Your Spots</a></li>
                 </ul>
             </nav>
 
@@ -125,7 +125,7 @@
                 </section>
 
                 <section id="why-rust">
-                    <h2>Why Rust Specifically</h2>
+                    <h2>So Why Rust?</h2>
 
                     <p>
                         The pitch for Rust in this context is simple: you compile your tool once per platform and get a single static binary with zero runtime dependencies. Drop it in <code>/usr/local/bin</code> or a network share. It just runs. No interpreter, no virtual environment, no dependency conflicts.
@@ -141,7 +141,7 @@
                 </section>
 
                 <section id="anvil">
-                    <h2>Anvil: A Package Manager</h2>
+                    <h2>Anvil: a Package Manager in Rust</h2>
 
                     <p>
                         Anvil is a package manager I built as an alternative to Rez. The core problem it solves is dependency resolution: given a request for packages A, B, and C, figure out which versions are compatible and set up the environment. Rez does this in Python, and for a large studio with thousands of packages, resolution can take several seconds. Artists notice.
@@ -197,7 +197,7 @@ enum Commands {
                 </section>
 
                 <section id="usd-lint">
-                    <h2>USD Lint</h2>
+                    <h2>Parsing USD with pest</h2>
 
                     <p>
                         The second tool I built in Rust is usd-lint, a linter for USD files. It parses <code>.usda</code> files and checks for common problems: missing defaultPrim, incorrect composition arc ordering, namespace issues, and other things that will silently break your pipeline.
@@ -236,7 +236,7 @@ reference_arc = {
                 </section>
 
                 <section id="the-ecosystem">
-                    <h2>The Ecosystem Helps</h2>
+                    <h2>crates That Do the Heavy Lifting</h2>
 
                     <p>
                         Rust's crate ecosystem is genuinely good for CLI tooling. Besides clap and pest, I regularly use:
@@ -255,7 +255,7 @@ reference_arc = {
                 </section>
 
                 <section id="learning-curve">
-                    <h2>The Learning Curve is Real</h2>
+                    <h2>It Took Me Three Months to Feel Productive</h2>
 
                     <p>
                         I will be honest: the borrow checker was frustrating for the first few weeks. I kept trying to write Python-style code where you pass references around freely, and the compiler kept telling me no. It took a while to internalize that Rust's ownership model is not a limitation but a different way of thinking about data flow.
@@ -271,7 +271,7 @@ reference_arc = {
                 </section>
 
                 <section id="when-to-use-it">
-                    <h2>When to Use It</h2>
+                    <h2>Pick Your Spots</h2>
 
                     <p>
                         To be clear about where I think Rust makes sense in VFX:

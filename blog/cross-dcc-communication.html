@@ -96,12 +96,12 @@
                 </h4>
                 <ul class="toc-list">
                     <li><a href="#the-problem" class="toc-link">The Problem</a></li>
-                    <li><a href="#three-apis" class="toc-link">Three DCCs, Three APIs</a></li>
-                    <li><a href="#the-adapter-pattern" class="toc-link">The Adapter Pattern</a></li>
-                    <li><a href="#camera-rerack" class="toc-link">The Camera Rerack Tool</a></li>
-                    <li><a href="#pyside-consistency" class="toc-link">PySide as the Constant</a></li>
-                    <li><a href="#real-gotchas" class="toc-link">Real Gotchas</a></li>
-                    <li><a href="#what-i-would-do-differently" class="toc-link">What I Would Do Differently</a></li>
+                    <li><a href="#three-apis" class="toc-link">Every DCC Speaks a Different Language</a></li>
+                    <li><a href="#the-adapter-pattern" class="toc-link">Wrapping Each DCC Behind One Interface</a></li>
+                    <li><a href="#camera-rerack" class="toc-link">Camera Reracking Across Three Apps</a></li>
+                    <li><a href="#pyside-consistency" class="toc-link">PySide Is the Same Everywhere</a></li>
+                    <li><a href="#real-gotchas" class="toc-link">Gotchas That Bit Us</a></li>
+                    <li><a href="#what-i-would-do-differently" class="toc-link">If I Did It Again</a></li>
                 </ul>
             </nav>
 
@@ -117,7 +117,7 @@
                 </section>
 
                 <section id="three-apis">
-                    <h2>Three DCCs, Three APIs</h2>
+                    <h2>Every DCC Speaks a Different Language</h2>
 
                     <p>
                         The first thing you realize is that Maya, Houdini, and Nuke have fundamentally different approaches to their Python APIs. Maya gives you <code>maya.cmds</code> for basic stuff and <code>OpenMaya</code> for anything serious. Houdini has <code>hou</code>, which is actually pretty well-designed but comes with its own quirks around Python versioning. Nuke has a deceptively simple API that hides some nasty single-threaded behavior.
@@ -156,7 +156,7 @@ focal = cam["focal"].value()</code></pre>
                 </section>
 
                 <section id="the-adapter-pattern">
-                    <h2>The Adapter Pattern</h2>
+                    <h2>Wrapping Each DCC Behind One Interface</h2>
 
                     <p>
                         The pattern that saved us was pretty standard software engineering: define an abstract interface, then write a concrete adapter for each DCC. Your business logic only talks to the interface. It never imports <code>maya.cmds</code> or <code>hou</code> directly.
@@ -208,7 +208,7 @@ class HoudiniCameraAdapter(CameraAdapter):
                 </section>
 
                 <section id="camera-rerack">
-                    <h2>The Camera Rerack Tool</h2>
+                    <h2>Camera Reracking Across Three Apps</h2>
 
                     <p>
                         The biggest cross-DCC tool I built was a camera rerack system. The idea is straightforward: you have a camera from one department (usually layout, working in Maya) and you need to apply adjustments to it in another DCC (compositing in Nuke, or FX in Houdini) while preserving the animation data.
@@ -224,7 +224,7 @@ class HoudiniCameraAdapter(CameraAdapter):
                 </section>
 
                 <section id="pyside-consistency">
-                    <h2>PySide as the Constant</h2>
+                    <h2>PySide Is the Same Everywhere</h2>
 
                     <p>
                         One thing that stays relatively consistent across DCCs is PySide. Maya ships with PySide2 (or PySide6 in newer versions), Houdini has PySide2, and Nuke has PySide2. The Qt API is basically the same everywhere. This means your UI code can be almost entirely shared.
@@ -240,7 +240,7 @@ class HoudiniCameraAdapter(CameraAdapter):
                 </section>
 
                 <section id="real-gotchas">
-                    <h2>Real Gotchas</h2>
+                    <h2>Gotchas That Bit Us</h2>
 
                     <p>
                         Here are some problems that bit us in production:
@@ -264,7 +264,7 @@ class HoudiniCameraAdapter(CameraAdapter):
                 </section>
 
                 <section id="what-i-would-do-differently">
-                    <h2>What I Would Do Differently</h2>
+                    <h2>If I Did It Again</h2>
 
                     <p>
                         Looking back, I would invest more time in automated testing. We tested manually by opening each DCC and clicking through the tool. That is slow and error-prone. Setting up headless testing with mayapy and hython would have caught regressions faster. Nuke has nukeassist and command-line rendering too. We just never made the time to set it up properly.
