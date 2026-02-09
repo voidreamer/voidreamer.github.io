@@ -1,56 +1,56 @@
 [
   {
     "title": "SimpleNotes",
-    "description": "Shareable notes and checklists for households. Fully serverless on AWS with React frontend, FastAPI backend on Lambda, DynamoDB, Supabase Auth, CloudFront CDN, and Terraform IaC. CI/CD via GitHub Actions with staging/production environments.",
+    "description": "Shareable notes and checklists app. AWS serverless stack — React frontend, FastAPI on Lambda, DynamoDB, Supabase Auth, CloudFront, and Terraform for infrastructure. Personal project to learn full-stack AWS deployment.",
     "tags": ["AWS", "FastAPI", "React", "Terraform", "DynamoDB", "CI/CD"],
     "links": { "code": "https://github.com/voidreamer/simplenotes" },
     "image": ""
   },
   {
     "title": "BabyLog",
-    "description": "Baby tracking app with FastAPI + SQLAlchemy backend on AWS Lambda, React frontend with Framer Motion, offline-first PWA. Full serverless infrastructure with API Gateway, CloudFront, custom domain with ACM certificates, and automated deployments.",
+    "description": "Baby tracking app. FastAPI + SQLAlchemy backend on AWS Lambda, React frontend with offline PWA support. Built to learn serverless infrastructure with Terraform.",
     "tags": ["FastAPI", "React", "AWS Lambda", "SQLAlchemy", "Terraform"],
     "links": { "code": "https://github.com/voidreamer/babylog" },
     "image": ""
   },
   {
     "title": "HeyVoice",
-    "description": "Voice Clone as a Service. FastAPI backend with Qwen3-TTS on Apple Silicon, React frontend, S3 audio storage, Stripe payments, gift codes system. Runs AI inference locally — zero cloud GPU costs. Full Terraform infrastructure.",
+    "description": "Voice cloning experiment using Qwen3-TTS on Apple Silicon. FastAPI backend, React frontend, S3 storage, Stripe integration. Runs AI inference locally — no cloud GPU costs.",
     "tags": ["FastAPI", "AI/ML", "React", "Stripe", "AWS", "Docker"],
     "links": { "code": "https://github.com/voidreamer/heyvoice" },
     "image": ""
   },
   {
     "title": "USD Lint",
-    "description": "A fast, configurable linter for OpenUSD .usda files. Rust-native PEG parser, 10 built-in rules for naming, hierarchy, composition arcs, and property validation. Colored terminal output, JSON, and GitHub Actions formats. Single static binary, zero runtime dependencies.",
+    "description": "Linter for OpenUSD .usda files. Rust-based PEG parser with 10 built-in rules for naming, hierarchy, and composition validation. Outputs to terminal, JSON, or GitHub Actions format.",
     "tags": ["Rust", "USD", "CLI", "Linter", "pest"],
     "links": { "code": "https://github.com/voidreamer/usd-lint" },
     "image": ""
   },
   {
     "title": "Rosewood UI",
-    "description": "A design system with CSS components, React wrappers, and PySide6/Qt components. Used across SimpleNotes, BabyLog, and HeyVoice for consistent UI. Published as npm packages with dark-first design.",
+    "description": "Personal design system with CSS components, React wrappers, and PySide6/Qt components. Used across my other projects for consistent styling. Dark-first design.",
     "tags": ["React", "TypeScript", "PySide6", "CSS", "Design System"],
     "links": { "code": "https://github.com/voidreamer/rosewood-ui" },
     "image": ""
   },
   {
     "title": "Anvil",
-    "description": "A Rust-based package manager for VFX/Animation pipelines. YAML-based package definitions, automatic dependency resolution, DCC launcher with correct environment setup. Cross-platform, resolves in milliseconds.",
+    "description": "Rust-based package manager for VFX pipelines. YAML package definitions, dependency resolution, and DCC launcher with environment setup. Alternative to Rez.",
     "tags": ["Rust", "CLI", "Package Manager", "Cross-Platform"],
     "links": { "code": "https://github.com/voidreamer/anvil" },
     "image": ""
   },
   {
     "title": "OpenGrid",
-    "description": "Lightweight production tracking alternative to ShotGrid. Python SDK, FastAPI REST API, and React dashboard with Rosewood UI. Track assets, shots, tasks, and versions.",
+    "description": "Lightweight production tracking tool — a simpler alternative to ShotGrid. Python SDK, FastAPI REST API, and React dashboard. Track assets, shots, tasks, and versions.",
     "tags": ["Python", "FastAPI", "React", "SQLite"],
     "links": { "code": "https://github.com/voidreamer/opengrid-lite" },
     "image": ""
   },
   {
     "title": "USD Asset Resolver",
-    "description": "Production-ready asset resolution for USD pipelines. Rust-powered core with PyO3 bindings, LRU caching, SQLite backend, version resolution, and PySide6 visual browser.",
+    "description": "USD AR2 asset resolver with a Rust core and Python bindings via PyO3. LRU caching, SQLite backend, version resolution, and a PySide6 browser GUI.",
     "tags": ["Rust", "Python", "USD", "PyO3", "PySide6"],
     "links": { "code": "https://github.com/voidreamer/usd-asset-resolver" },
     "image": ""
