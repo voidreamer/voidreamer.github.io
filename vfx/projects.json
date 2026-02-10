@@ -4,7 +4,7 @@
     "description": "Package manager for VFX pipelines, written in Rust. Resolves YAML-based package definitions and launches DCCs with the right environment variables. Basically a simpler, faster Rez.",
     "tags": ["Rust", "CLI", "VFX Pipeline", "Package Manager"],
     "links": { "code": "https://github.com/voidreamer/anvil" },
-    "image": ""
+    "image": "../images/anvil.gif"
   },
   {
     "title": "OpenGrid",
@@ -25,7 +25,7 @@
     "description": "Linter for .usda files — catches naming violations, bad composition arcs, missing defaultPrim, that kind of thing. Rust PEG parser, no USD SDK needed. Outputs to terminal, JSON, or GitHub Actions.",
     "tags": ["Rust", "USD", "CLI", "Linter"],
     "links": { "code": "https://github.com/voidreamer/usd-lint" },
-    "image": ""
+    "image": "../images/usd-lint.gif"
   },
   {
     "title": "Rosewood UI",
