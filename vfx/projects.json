@@ -1,35 +1,35 @@
 [
   {
     "title": "Anvil",
-    "description": "Rust-based package manager for VFX pipelines. Think Rez, but faster. YAML package definitions, dependency resolution, and DCC launcher for Maya, Houdini, Blender, Nuke with environment setup.",
+    "description": "Package manager for VFX pipelines, written in Rust. Resolves YAML-based package definitions and launches DCCs with the right environment variables. Basically a simpler, faster Rez.",
     "tags": ["Rust", "CLI", "VFX Pipeline", "Package Manager"],
     "links": { "code": "https://github.com/voidreamer/anvil" },
-    "image": ""
+    "image": "../images/anvil.gif"
   },
   {
     "title": "OpenGrid",
-    "description": "Lightweight production tracking tool — a simpler alternative to ShotGrid. Python SDK, FastAPI REST API, and React dashboard. Track assets, shots, tasks, and versions.",
+    "description": "Simple production tracker — the kind of thing you'd build when ShotGrid is too heavy for your team. Python SDK backed by SQLite, FastAPI server, React dashboard.",
     "tags": ["Python", "FastAPI", "React", "Production Tracking"],
     "links": { "code": "https://github.com/voidreamer/opengrid-lite" },
     "image": ""
   },
   {
     "title": "USD Asset Resolver",
-    "description": "USD AR2 resolver with a Rust core and Python bindings via PyO3. URI parsing, LRU caching with mtime invalidation, SQLite backend, version resolution, and a PySide6 asset browser.",
+    "description": "USD AR2 resolver plugin. Parses asset:// URIs, resolves versions from a SQLite database, caches results. Rust core with PyO3 bindings. Includes a PySide6 browser for browsing assets visually.",
     "tags": ["Rust", "USD", "Python", "PyO3", "PySide6"],
     "links": { "code": "https://github.com/voidreamer/usd-asset-resolver" },
     "image": ""
   },
   {
     "title": "USD Lint",
-    "description": "Linter for OpenUSD .usda files. Rust-based PEG parser with 10 built-in rules for naming, hierarchy, and composition validation. Outputs to terminal, JSON, or GitHub Actions format.",
+    "description": "Linter for .usda files — catches naming violations, bad composition arcs, missing defaultPrim, that kind of thing. Rust PEG parser, no USD SDK needed. Outputs to terminal, JSON, or GitHub Actions.",
     "tags": ["Rust", "USD", "CLI", "Linter"],
     "links": { "code": "https://github.com/voidreamer/usd-lint" },
-    "image": ""
+    "image": "../images/usd-lint.gif"
   },
   {
     "title": "Rosewood UI",
-    "description": "Personal design system with CSS components, React wrappers, and PySide6/Qt components for DCC tool GUIs. Dark-first design for both web apps and desktop pipeline tools.",
+    "description": "Design system I use across my projects. CSS component library with React and PySide6/Qt wrappers, so I can share the same look between web apps and DCC tool GUIs.",
     "tags": ["PySide6", "React", "CSS", "Design System"],
     "links": { "code": "https://github.com/voidreamer/rosewood-ui" },
     "image": ""
