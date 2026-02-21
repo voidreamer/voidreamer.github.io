@@ -688,7 +688,9 @@
         container.innerHTML = projects.map(project => `
             <article class="p-project-card ${project.featured ? 'p-project-featured' : ''}">
                 <div class="p-project-img">
-                    ${project.image ?
+                    ${project.video ?
+                        `<div class="p-project-video"><iframe src="${project.video}?badge=0&autopause=0&player_id=0&app_id=58479&byline=0&title=0&portrait=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>` :
+                    project.image ?
                         `<img src="${project.image}" alt="${project.title}" loading="lazy" onerror="this.parentElement.innerHTML='<span class=\\'p-project-placeholder\\'>${project.title}</span>'">` :
                         `<span class="p-project-placeholder">${project.title}</span>`
                     }
@@ -700,12 +702,22 @@
                     <div class="p-project-tags">
                         ${project.tags.map(tag => `<span class="badge">${tag}</span>`).join('')}
                     </div>
-                    ${(project.links.demo || project.links.code) ? `
+                    ${(project.links.demo || project.links.code || project.links.vimeo || project.links.artstation) ? `
                     <div class="p-project-links">
                         ${project.links.demo ? `
                         <a href="${project.links.demo}" class="btn btn-sm btn-ghost" target="_blank" rel="noopener">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                             Live
+                        </a>` : ''}
+                        ${project.links.vimeo ? `
+                        <a href="${project.links.vimeo}" class="btn btn-sm btn-ghost" target="_blank" rel="noopener">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609-3.268 4.247-6.026 6.37-8.29 6.37-1.409 0-2.578-1.294-3.553-3.881L5.322 11.4C4.603 8.816 3.834 7.522 3.01 7.522c-.179 0-.806.378-1.881 1.132L0 7.197c1.185-1.044 2.351-2.084 3.501-3.128C5.08 2.701 6.266 1.984 7.055 1.91c1.867-.18 3.016 1.1 3.447 3.838.465 2.953.789 4.789.971 5.507.539 2.45 1.131 3.674 1.776 3.674.502 0 1.256-.796 2.265-2.385 1.004-1.589 1.54-2.797 1.612-3.628.144-1.371-.395-2.061-1.614-2.061-.574 0-1.167.121-1.777.391 1.186-3.868 3.434-5.757 6.762-5.637 2.473.06 3.628 1.664 3.493 4.797l-.013.01z"/></svg>
+                            Vimeo
+                        </a>` : ''}
+                        ${project.links.artstation ? `
+                        <a href="${project.links.artstation}" class="btn btn-sm btn-ghost" target="_blank" rel="noopener">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M0 17.723l2.027 3.505h.001a2.424 2.424 0 0 0 2.164 1.333h13.457l-2.792-4.838H0zm24-2.218a2.42 2.42 0 0 0-.468-1.432L14.837 1.073A2.42 2.42 0 0 0 12.74 0h-4.06l8.083 13.996h7.235V15.5L24 15.505zm-17.13-.007l4.042-7 4.043 7H6.87z"/></svg>
+                            ArtStation
                         </a>` : ''}
                         ${project.links.code ? `
                         <a href="${project.links.code}" class="btn btn-sm btn-ghost" target="_blank" rel="noopener">

@@ -1,38 +1,67 @@
 [
     {
-        "title": "Procedural Feather System",
-        "description": "Custom Houdini HDA for generating and simulating feather systems. Used on Maleficent 2 for wing hero shots. Procedural placement, guide-based grooming, Vellum sim integration.",
-        "tags": ["Houdini", "HDA", "Vellum", "Procedural"],
+        "title": "Professional Demo Reel",
+        "description": "Full demo reel showcasing character FX, rigging, cloth/hair simulation, muscle systems, and pipeline tools across multiple feature film productions.",
+        "tags": ["CFX", "Rigging", "Simulation", "Maya", "Houdini"],
+        "links": { "vimeo": "https://vimeo.com/395623564" },
+        "video": "https://player.vimeo.com/video/395623564",
+        "featured": true,
+        "category": "Reel"
+    },
+    {
+        "title": "Character FX Reel",
+        "description": "Cloth, hair, and skin simulation work. Nucleus solver setups, nCloth/nHair configurations, and character deformation for feature animation.",
+        "tags": ["CFX", "Cloth", "Hair", "Nucleus", "Maya"],
+        "links": { "vimeo": "https://vimeo.com/313980090" },
+        "video": "https://player.vimeo.com/video/313980090",
+        "featured": true,
+        "category": "Reel"
+    },
+    {
+        "title": "Cloth & Hair Simulation",
+        "description": "Detailed cloth and hair simulation tests. Showcasing Nucleus solver capabilities for realistic fabric and hair dynamics.",
+        "tags": ["Cloth Sim", "Hair Sim", "Nucleus", "Maya"],
+        "links": { "vimeo": "https://vimeo.com/313997497" },
+        "video": "https://player.vimeo.com/video/313997497",
         "category": "CFX"
     },
     {
-        "title": "Muscle & Skin Pipeline",
-        "description": "End-to-end muscle rigging and simulation pipeline using Ziva Dynamics. Character deformation from bones through muscles to skin. Built for Rumble's monster wrestler characters.",
-        "tags": ["Ziva Dynamics", "Maya", "Muscle Sim", "Rigging"],
+        "title": "Muscle Simulation Pipeline",
+        "description": "End-to-end muscle rigging and simulation. From skeleton to muscle to skin deformation with Ziva Dynamics-style setups. Includes turntable and transition views.",
+        "tags": ["Muscle Sim", "Ziva", "Rigging", "Maya"],
+        "links": { "vimeo": "https://vimeo.com/311959746" },
+        "video": "https://player.vimeo.com/video/311959746",
         "category": "CFX"
     },
     {
-        "title": "Auto-Rig Framework",
-        "description": "Modular rigging system built on Maya API (OpenMaya). Space switchers, IK/FK blending, rig validation, batch processing. Used across the rigging team at L'Atelier Animation.",
-        "tags": ["Maya API", "OpenMaya", "Python", "Rigging"],
-        "category": "Rigging"
+        "title": "Houdini RBD Dynamics",
+        "description": "Rigid body destruction, debris, and dirt simulation in Houdini. Procedural setup for large-scale destruction effects.",
+        "tags": ["Houdini", "RBD", "Destruction", "FX"],
+        "links": { "vimeo": "https://vimeo.com/313994902" },
+        "video": "https://player.vimeo.com/video/313994902",
+        "category": "FX"
     },
     {
-        "title": "USD Asset Browser",
-        "description": "PySide2 asset browser for USD/Solaris workflows. Stage inspection, custom animation exporter, department handoff tooling. Used daily by 40+ artists at Ghost VFX.",
-        "tags": ["USD", "Solaris", "PySide2", "Python"],
+        "title": "Heavy Objects Diagnostic Tool",
+        "description": "Maya Python tool for diagnosing and optimizing heavy scenes. Includes proxifier, instancer, and reducer modules. 4-part video walkthrough.",
+        "tags": ["Maya", "Python", "Optimization", "Tool Dev"],
+        "links": { "vimeo": "https://vimeo.com/295248789" },
+        "video": "https://player.vimeo.com/video/295248789",
         "category": "Pipeline"
     },
     {
-        "title": "Cross-DCC Camera Tool",
-        "description": "Camera rerack tool that works across Maya, Houdini, and Nuke. Ensures camera data consistency across departments. Reduced camera-related comp fixes by 70%.",
-        "tags": ["Maya", "Houdini", "Nuke", "Python"],
+        "title": "Maya USD Author",
+        "description": "Tool to author USD edits directly in Maya. PySide6 interface for stage editing, layer management, and property overrides.",
+        "tags": ["PySide6", "USD", "Maya"],
+        "links": { "code": "https://github.com/voidreamer/maya-usd-author" },
+        "image": "../vfx/images/maya-usd-author.jpg",
         "category": "Pipeline"
     },
     {
-        "title": "XGen Grooming Tools",
-        "description": "Custom XGen grooming workflow tools for hero character hair and fur. Guide manipulation, collision setup, and render-ready export pipeline.",
-        "tags": ["XGen", "Maya", "Grooming", "Arnold"],
-        "category": "CFX"
+        "title": "Anvil",
+        "description": "Rust-based package manager for VFX pipelines. Think Rez, but faster. YAML packages, dependency resolution, DCC launcher.",
+        "tags": ["Rust", "CLI", "VFX Pipeline"],
+        "links": { "code": "https://github.com/voidreamer/anvil" },
+        "category": "Pipeline"
     }
 ]
