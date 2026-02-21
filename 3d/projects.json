@@ -1,0 +1,32 @@
+[
+    {
+        "title": "USD Asset Resolver",
+        "desc": "Custom AR2 plugin for resolving asset paths in USD pipelines. Includes a Qt-based browser for navigating asset hierarchies and previewing stages.",
+        "tags": ["USD", "C++", "Python", "Qt"],
+        "link": "https://github.com/voidreamer/usd-asset-resolver"
+    },
+    {
+        "title": "DCC Publisher",
+        "desc": "DCC-agnostic publish framework for validating and exporting assets from Maya, Houdini, and Nuke with configurable validation rules.",
+        "tags": ["Python", "Maya", "Houdini", "Pipeline"],
+        "link": "https://github.com/voidreamer/dcc-publisher"
+    },
+    {
+        "title": "Anvil",
+        "desc": "Lightweight environment manager for VFX pipelines. Like Rez but simpler — YAML-based package definitions, dependency resolution, and shell environment setup.",
+        "tags": ["Rust", "YAML", "Pipeline", "CLI"],
+        "link": "https://github.com/voidreamer/anvil"
+    },
+    {
+        "title": "OpenGrid",
+        "desc": "Production tracking system for small studios. Python SDK, FastAPI backend, React web UI. Includes an AMI system for dispatching ffmpeg and render jobs.",
+        "tags": ["Python", "React", "FastAPI", "ShotGrid-alt"],
+        "link": "https://github.com/voidreamer/opengrid-lite"
+    },
+    {
+        "title": "PolyReducer",
+        "desc": "Mesh decimation tool for optimizing high-poly assets. Supports multiple reduction algorithms with quality preservation controls.",
+        "tags": ["C++", "Mesh", "Optimization"],
+        "link": "https://github.com/voidreamer/polyreducer"
+    }
+]
