@@ -1,32 +1,38 @@
 [
     {
-        "title": "USD Asset Resolver",
-        "desc": "Custom AR2 plugin for resolving asset paths in USD pipelines. Includes a Qt-based browser for navigating asset hierarchies and previewing stages.",
-        "tags": ["USD", "C++", "Python", "Qt"],
-        "link": "https://github.com/voidreamer/usd-asset-resolver"
+        "title": "Procedural Feather System",
+        "description": "Custom Houdini HDA for generating and simulating feather systems. Used on Maleficent 2 for wing hero shots. Procedural placement, guide-based grooming, Vellum sim integration.",
+        "tags": ["Houdini", "HDA", "Vellum", "Procedural"],
+        "category": "CFX"
     },
     {
-        "title": "DCC Publisher",
-        "desc": "DCC-agnostic publish framework for validating and exporting assets from Maya, Houdini, and Nuke with configurable validation rules.",
-        "tags": ["Python", "Maya", "Houdini", "Pipeline"],
-        "link": "https://github.com/voidreamer/dcc-publisher"
+        "title": "Muscle & Skin Pipeline",
+        "description": "End-to-end muscle rigging and simulation pipeline using Ziva Dynamics. Character deformation from bones through muscles to skin. Built for Rumble's monster wrestler characters.",
+        "tags": ["Ziva Dynamics", "Maya", "Muscle Sim", "Rigging"],
+        "category": "CFX"
     },
     {
-        "title": "Anvil",
-        "desc": "Lightweight environment manager for VFX pipelines. Like Rez but simpler — YAML-based package definitions, dependency resolution, and shell environment setup.",
-        "tags": ["Rust", "YAML", "Pipeline", "CLI"],
-        "link": "https://github.com/voidreamer/anvil"
+        "title": "Auto-Rig Framework",
+        "description": "Modular rigging system built on Maya API (OpenMaya). Space switchers, IK/FK blending, rig validation, batch processing. Used across the rigging team at L'Atelier Animation.",
+        "tags": ["Maya API", "OpenMaya", "Python", "Rigging"],
+        "category": "Rigging"
     },
     {
-        "title": "OpenGrid",
-        "desc": "Production tracking system for small studios. Python SDK, FastAPI backend, React web UI. Includes an AMI system for dispatching ffmpeg and render jobs.",
-        "tags": ["Python", "React", "FastAPI", "ShotGrid-alt"],
-        "link": "https://github.com/voidreamer/opengrid-lite"
+        "title": "USD Asset Browser",
+        "description": "PySide2 asset browser for USD/Solaris workflows. Stage inspection, custom animation exporter, department handoff tooling. Used daily by 40+ artists at Ghost VFX.",
+        "tags": ["USD", "Solaris", "PySide2", "Python"],
+        "category": "Pipeline"
     },
     {
-        "title": "PolyReducer",
-        "desc": "Mesh decimation tool for optimizing high-poly assets. Supports multiple reduction algorithms with quality preservation controls.",
-        "tags": ["C++", "Mesh", "Optimization"],
-        "link": "https://github.com/voidreamer/polyreducer"
+        "title": "Cross-DCC Camera Tool",
+        "description": "Camera rerack tool that works across Maya, Houdini, and Nuke. Ensures camera data consistency across departments. Reduced camera-related comp fixes by 70%.",
+        "tags": ["Maya", "Houdini", "Nuke", "Python"],
+        "category": "Pipeline"
+    },
+    {
+        "title": "XGen Grooming Tools",
+        "description": "Custom XGen grooming workflow tools for hero character hair and fur. Guide manipulation, collision setup, and render-ready export pipeline.",
+        "tags": ["XGen", "Maya", "Grooming", "Arnold"],
+        "category": "CFX"
     }
 ]
