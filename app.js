@@ -689,7 +689,7 @@
             <article class="p-project-card ${project.featured ? 'p-project-featured' : ''}">
                 <div class="p-project-img">
                     ${project.video ?
-                        `<div class="p-project-video"><iframe src="${project.video}?badge=0&autopause=0&player_id=0&app_id=58479&byline=0&title=0&portrait=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>` :
+                        `<div class="p-project-video"><iframe src="${project.video}?badge=0&autopause=0&byline=0&title=0&portrait=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" allowfullscreen loading="lazy"></iframe></div>` :
                     project.image ?
                         `<img src="${project.image}" alt="${project.title}" loading="lazy" onerror="this.parentElement.innerHTML='<span class=\\'p-project-placeholder\\'>${project.title}</span>'">` :
                         `<span class="p-project-placeholder">${project.title}</span>`
