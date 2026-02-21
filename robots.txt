@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://yourdomain.pages.dev/sitemap.xml
+Sitemap: https://voidreamer.github.io/sitemap.xml
