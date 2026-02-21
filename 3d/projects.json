@@ -84,6 +84,7 @@
         "description": "Rust-based package manager for VFX pipelines. Think Rez, but faster. YAML packages, dependency resolution, DCC launcher.",
         "tags": ["Rust", "CLI", "VFX Pipeline"],
         "links": { "code": "https://github.com/voidreamer/anvil" },
+        "image": "../images/anvil.gif",
         "category": "Pipeline"
     }
 ]
