@@ -18,55 +18,19 @@
         "category": "Reel"
     },
     {
-        "title": "UE-WeatherFX",
-        "description": "Procedural weather material shaders for Unreal Engine 5. 10 HLSL shaders: rain drops/streaks, snow accumulation/sparkle/footprints, volumetric fog, heat haze, wind grass/flags. No textures — pure math. SM5 compatible.",
-        "tags": ["Unreal Engine", "HLSL", "Shaders", "Procedural"],
-        "links": { "code": "https://github.com/voidreamer/ue-weatherfx" },
-        "featured": true,
-        "category": "Shaders"
-    },
-    {
-        "title": "ue-assetaudit",
-        "description": "Fast Rust CLI for auditing Unreal Engine project assets. Naming conventions, size warnings, duplicate detection (SHA256, parallelized), broken references, empty folders. TOML config, JSON output for CI.",
-        "tags": ["Rust", "Unreal Engine", "CLI", "Gamedev"],
-        "links": { "code": "https://github.com/voidreamer/ue-assetaudit" },
-        "category": "Pipeline"
-    },
-    {
-        "title": "Bevy Aurora",
-        "description": "Aurora borealis shader effect for the Bevy game engine. WGSL compute shaders for real-time northern lights simulation with procedural noise and color gradients.",
-        "tags": ["Bevy", "Rust", "WGSL", "Shaders"],
-        "links": { "code": "https://github.com/voidreamer/bevy_aurora" },
-        "category": "Shaders"
-    },
-    {
-        "title": "Bevy Ahoy",
-        "description": "3D kinematic character controller for Bevy. Physics-based movement, water interaction, camera system. Clean ECS architecture for game prototyping.",
-        "tags": ["Bevy", "Rust", "Gamedev", "Physics"],
-        "links": { "code": "https://github.com/voidreamer/bevy_ahoy" },
-        "category": "Gamedev"
-    },
-    {
-        "title": "Bevy Radiance Cascades",
-        "description": "Radiance cascade global illumination implementation in Bevy. Real-time GI using cascaded radiance probes for dynamic lighting in game scenes.",
-        "tags": ["Bevy", "Rust", "GI", "Rendering"],
-        "links": { "code": "https://github.com/voidreamer/bevy_radiance_cascades" },
-        "category": "Rendering"
-    },
-    {
-        "title": "Muscle Simulation Pipeline",
-        "description": "End-to-end muscle rigging and simulation. From skeleton to muscle to skin deformation with Ziva Dynamics-style setups.",
-        "tags": ["Muscle Sim", "Ziva", "Rigging", "Maya"],
-        "links": { "vimeo": "https://vimeo.com/311959746" },
-        "video": "https://player.vimeo.com/video/311959746",
-        "category": "CFX"
-    },
-    {
         "title": "Cloth & Hair Simulation",
-        "description": "Cloth and hair simulation tests. Nucleus solver capabilities for realistic fabric and hair dynamics.",
+        "description": "Detailed cloth and hair simulation tests. Showcasing Nucleus solver capabilities for realistic fabric and hair dynamics.",
         "tags": ["Cloth Sim", "Hair Sim", "Nucleus", "Maya"],
         "links": { "vimeo": "https://vimeo.com/313997497" },
         "video": "https://player.vimeo.com/video/313997497",
+        "category": "CFX"
+    },
+    {
+        "title": "Muscle Simulation Pipeline",
+        "description": "End-to-end muscle rigging and simulation. From skeleton to muscle to skin deformation with Ziva Dynamics-style setups. Includes turntable and transition views.",
+        "tags": ["Muscle Sim", "Ziva", "Rigging", "Maya"],
+        "links": { "vimeo": "https://vimeo.com/311959746" },
+        "video": "https://player.vimeo.com/video/311959746",
         "category": "CFX"
     },
     {
@@ -76,6 +40,50 @@
         "links": { "vimeo": "https://vimeo.com/313994902" },
         "video": "https://player.vimeo.com/video/313994902",
         "category": "FX"
+    },
+    {
+        "title": "UE-WeatherFX",
+        "description": "Procedural weather material shaders for Unreal Engine 5. Rain ripples, snow accumulation, wind animation, volumetric fog — all in HLSL, no textures required. Shared Material Parameter Collection for runtime control.",
+        "tags": ["Unreal Engine", "HLSL", "Shaders", "Procedural"],
+        "links": { "code": "https://github.com/voidreamer/ue-weatherfx" },
+        "featured": true,
+        "category": "Shaders"
+    },
+    {
+        "title": "ue-assetaudit",
+        "description": "Fast Rust CLI for auditing Unreal Engine project assets. Naming conventions, oversized textures, duplicates, broken references. Parses .uasset headers directly — no UE installation needed. CI-friendly JSON output.",
+        "tags": ["Rust", "Unreal Engine", "CLI", "DevOps"],
+        "links": { "code": "https://github.com/voidreamer/ue-assetaudit" },
+        "category": "Pipeline"
+    },
+    {
+        "title": "Bevy Aurora",
+        "description": "Real-time aurora borealis shader written in WGSL for the Bevy game engine. Procedural curtain effect with customizable colors, wave parameters, and performance-friendly rendering.",
+        "tags": ["Bevy", "Rust", "WGSL", "Shader"],
+        "links": { "code": "https://github.com/voidreamer/bevy_aurora" },
+        "category": "Shaders"
+    },
+    {
+        "title": "Bevy Radiance Cascades",
+        "description": "Radiance cascade global illumination implementation in Bevy. Real-time indirect lighting for 2D/3D scenes using the radiance cascades algorithm.",
+        "tags": ["Bevy", "Rust", "GI", "Rendering"],
+        "links": { "code": "https://github.com/voidreamer/bevy_radiance_cascades" },
+        "category": "Rendering"
+    },
+    {
+        "title": "Bevy Foliage Tool",
+        "description": "Interactive foliage placement and scattering tool for Bevy. Procedural distribution with density maps, slope constraints, and real-time preview.",
+        "tags": ["Bevy", "Rust", "Procedural", "Tools"],
+        "links": { "code": "https://github.com/voidreamer/bevy_foliage_tool" },
+        "category": "Tools"
+    },
+    {
+        "title": "Heavy Objects Diagnostic Tool",
+        "description": "Maya Python tool for diagnosing and optimizing heavy scenes. Includes proxifier, instancer, and reducer modules. 4-part video walkthrough.",
+        "tags": ["Maya", "Python", "Optimization", "Tool Dev"],
+        "links": { "vimeo": "https://vimeo.com/295248789" },
+        "video": "https://player.vimeo.com/video/295248789",
+        "category": "Pipeline"
     },
     {
         "title": "Maya USD Author",
