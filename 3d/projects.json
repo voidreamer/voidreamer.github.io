@@ -64,20 +64,6 @@
         "category": "Shaders"
     },
     {
-        "title": "Bevy Radiance Cascades",
-        "description": "Radiance cascade global illumination implementation in Bevy. Real-time indirect lighting for 2D/3D scenes using the radiance cascades algorithm.",
-        "tags": ["Bevy", "Rust", "GI", "Rendering"],
-        "links": { "code": "https://github.com/voidreamer/bevy_radiance_cascades" },
-        "category": "Rendering"
-    },
-    {
-        "title": "Bevy Foliage Tool",
-        "description": "Interactive foliage placement and scattering tool for Bevy. Procedural distribution with density maps, slope constraints, and real-time preview.",
-        "tags": ["Bevy", "Rust", "Procedural", "Tools"],
-        "links": { "code": "https://github.com/voidreamer/bevy_foliage_tool" },
-        "category": "Tools"
-    },
-    {
         "title": "Heavy Objects Diagnostic Tool",
         "description": "Maya Python tool for diagnosing and optimizing heavy scenes. Includes proxifier, instancer, and reducer modules. 4-part video walkthrough.",
         "tags": ["Maya", "Python", "Optimization", "Tool Dev"],
